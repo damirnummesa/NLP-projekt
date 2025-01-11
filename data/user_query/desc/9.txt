@@ -1,0 +1,1 @@
+Calculate the average 'K' for rows where 'EC' is greater than 10.

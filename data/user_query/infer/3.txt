@@ -1,0 +1,1 @@
+Which parameter has the strongest correlation with EC among {pH_CaCl2, pH_H2O, OC, CaCO3, P, N, K}?

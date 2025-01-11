@@ -1,0 +1,1 @@
+Plot the average ‘OC’ for each land type (LC0_Desc). save it as a png.

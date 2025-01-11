@@ -1,0 +1,1 @@
+Generate a correlation matrix of these columns: EC, pH_CaCl2, pH_H2O, OC, CaCO3, P, N, K and visualize it using a heatmap.

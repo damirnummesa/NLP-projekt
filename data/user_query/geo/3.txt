@@ -1,0 +1,1 @@
+Plot all the points with LC0_Desc=Woodland & pH<6 in Europe. Save the result as a png. Use geopandas.

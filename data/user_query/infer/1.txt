@@ -1,0 +1,1 @@
+Is there a significant relationship between land type (LC0_Desc) and pH_H2O? Use chi square from scipy.

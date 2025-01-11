@@ -1,0 +1,1 @@
+Using the Central Limit Theorem, simulate the sampling distribution of the mean 'pH_H2O' for sample sizes of 30. Plot the distribution and compare it to the normal distribution.

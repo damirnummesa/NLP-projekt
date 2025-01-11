@@ -1,0 +1,1 @@
+Perform a t-test to compare 'K' between Grassland and Cropland.

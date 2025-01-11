@@ -1,0 +1,1 @@
+Calculate the z-scores for 'EC' and identify any outliers (z-score > 3 or < -3).

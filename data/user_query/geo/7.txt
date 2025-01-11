@@ -1,0 +1,1 @@
+Create a map with markers for points where 'K' is in the top 10 percentile, in Europe. Don't merge these shapefiles just plot them. use geopandas. save the result as a png.

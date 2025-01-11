@@ -1,0 +1,1 @@
+Create a map with markers for all locations where 'K' is above its median value, in Europe. use geopandas. save the result as a png.

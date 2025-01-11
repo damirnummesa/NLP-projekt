@@ -1,0 +1,1 @@
+Perform KMeans clustering on the TH_LAT and TH_LONG data to identify 3 clusters and plot them on a map. save it as a png.

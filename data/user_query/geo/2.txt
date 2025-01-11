@@ -1,0 +1,1 @@
+Plot all the points with LC0_Desc=Woodland in Europe. Save the result as a png. Use geopandas.
