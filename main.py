@@ -1,7 +1,7 @@
 import pandas as pd
-from pipeline import run_pipeline
+from utils.pipeline import run_pipeline
 # from clientConversational import HuggingFaceLLMClient
-from client import HuggingFaceLLMClient
+from utils.llm_api.client import HuggingFaceLLMClient
 import os, io
 
 def run():

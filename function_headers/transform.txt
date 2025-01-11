@@ -1,0 +1,92 @@
+# =======================
+# Functions Overview
+# =======================
+# This script serves as a reference and skeleton for performing tasks related to:
+# 1. Descriptive Statistics
+# 2. Inferential Statistics
+# 3. Geo-Information Processing
+# using libraries such as pandas, geopandas, matplotlib, seaborn, and SciPy.
+
+# To implement specific tasks, you can refer to the bellow function headers and method descriptions.
+
+# =======================
+# Pandas Function Headers
+# =======================
+
+# Basic DataFrame Operations
+
+DataFrame.groupby(by: str | list[str]) -> GroupBy
+DataFrame.mean(axis: int) -> Series | DataFrame
+DataFrame.max(axis: int) -> Series | DataFrame
+DataFrame.sum(axis: int) -> Series | DataFrame
+DataFrame.describe(percentiles: list[float] = None) -> DataFrame
+DataFrame.corr(method: str = 'pearson') -> DataFrame
+DataFrame.query(expr: str, inplace: bool = False) -> DataFrame
+DataFrame.loc[] -> Series | DataFrame
+DataFrame.apply(func: Callable, axis: int) -> Series | DataFrame
+
+# Statistical Tests from scipy
+
+chi2_contingency(observed: ndarray) -> tuple
+f_oneway(*args: ndarray) -> tuple
+ttest_ind(a: ndarray, b: ndarray, equal_var: bool = True) -> tuple
+pearsonr(x: ndarray, y: ndarray) -> tuple
+zscore(a: ndarray, axis: int = 0) -> ndarray
+norm.interval(alpha: float, loc: float, scale: float) -> tuple
+
+# Other Analytical Tools
+
+pandas.Series.value_counts(normalize: bool = False) -> Series
+
+# ==========================
+# GeoPandas Function Headers
+# ==========================
+
+# GeoDataFrame Operations
+
+GeoDataFrame.query(expr: str, inplace: bool = False) -> GeoDataFrame
+GeoDataFrame.loc[] -> GeoSeries | GeoDataFrame
+GeoDataFrame.groupby(by: str | list[str]) -> GroupBy
+GeoDataFrame.plot(column: str = None, cmap: str = None, **kwargs) -> AxesSubplot
+GeoDataFrame.to_crs(crs: str | dict, inplace: bool = False) -> GeoDataFrame
+GeoDataFrame.geometry -> GeoSeries
+GeoSeries.x -> Series
+GeoSeries.y -> Series
+GeoDataFrame.assign(**kwargs) -> GeoDataFrame
+
+# Spatial Operations
+
+GeoDataFrame.distance(other: GeoSeries | GeoDataFrame) -> Series
+GeoDataFrame.contains(other: GeoSeries | GeoDataFrame) -> Series
+GeoDataFrame.within(other: GeoSeries | GeoDataFrame) -> Series
+
+# ==========================
+# SciPy Function Headers
+# ==========================
+
+# Statistical Operations
+
+scipy.stats.ttest_ind(a: ndarray, b: ndarray, equal_var: bool = True) -> tuple
+scipy.stats.f_oneway(*args: ndarray) -> tuple
+scipy.stats.zscore(a: ndarray, axis: int = 0) -> ndarray
+scipy.stats.pearsonr(x: ndarray, y: ndarray) -> tuple
+scipy.stats.norm.interval(alpha: float, loc: float, scale: float) -> tuple
+
+# Clustering with SciKit-Learn
+
+sklearn.cluster.KMeans(n_clusters: int, **kwargs) -> KMeans
+KMeans.fit(X: ndarray, y: ndarray = None) -> KMeans
+KMeans.predict(X: ndarray) -> ndarray
+
+# =========================
+# Other Libraries Function Headers
+# =========================
+
+# NumPy Operations
+
+numpy.linspace(start: float, stop: float, num: int) -> ndarray
+numpy.mean(a: ndarray, axis: int = None) -> float | ndarray
+numpy.percentile(a: ndarray, q: float | list[float], axis: int = None) -> float | ndarray
+numpy.where(condition: ndarray, x: ndarray, y: ndarray) -> ndarray
+numpy.random.normal(loc: float, scale: float, size: int) -> ndarray
+numpy.random.choice(a: ndarray, size: int, replace: bool = True, p: ndarray = None) -> ndarray

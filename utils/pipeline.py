@@ -1,5 +1,5 @@
-from client import HuggingFaceLLMClient
-from query import QueryProvider, QueryType
+from utils.llm_api.client import HuggingFaceLLMClient
+from utils.llm_api.query import QueryProvider, QueryType
 import json
 import logging
 

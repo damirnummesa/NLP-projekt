@@ -1,0 +1,33 @@
+# =======================
+# Functions Overview
+# =======================
+# This script serves as a reference and skeleton for performing visualization tasks using libraries such as pandas, matplotlib and seaborn.
+
+# Plotting Pandas DataFrame 
+
+pandas.DataFrame.plot(kind: str, **kwargs) -> AxesSubplot
+
+
+# Plotting and Visualization
+
+matplotlib.pyplot.plot(*args, **kwargs) -> list[Line2D]
+matplotlib.pyplot.scatter(x: ndarray, y: ndarray, **kwargs) -> PathCollection
+matplotlib.pyplot.hist(x: ndarray, bins: int = 10, **kwargs) -> tuple
+matplotlib.pyplot.bar(x: ndarray, height: ndarray, **kwargs) -> BarContainer
+matplotlib.pyplot.imshow(X: ndarray, **kwargs) -> AxesImage
+matplotlib.pyplot.title(label: str, **kwargs) -> Text
+matplotlib.pyplot.xlabel(xlabel: str, **kwargs) -> Text
+matplotlib.pyplot.ylabel(ylabel: str, **kwargs) -> Text
+matplotlib.pyplot.colorbar(mappable: ScalarMappable, **kwargs) -> Colorbar
+matplotlib.pyplot.savefig(fname: str, **kwargs) -> None
+matplotlib.pyplot.show() -> None
+
+# Heatmaps with Seaborn
+
+seaborn.heatmap(data: DataFrame, annot: bool = False, **kwargs) -> AxesSubplot
+
+# Seaborn Visualization
+
+seaborn.kdeplot(data: ndarray | Series, **kwargs) -> AxesSubplot
+seaborn.scatterplot(data: DataFrame, x: str, y: str, **kwargs) -> AxesSubplot
+seaborn.barplot(data: DataFrame, x: str, y: str, **kwargs) -> AxesSubplot
