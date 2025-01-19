@@ -22,7 +22,7 @@ def run_pipeline(objective: str,
 
     logging.log(logging.INFO, "Started parsing response")
     try:
-        parsed_response = json.loads(response)
+        parsed_response = extract_json(response)
         transform_instructions = parsed_response["transform"]
         visualize_instructions = parsed_response["visualize"]
         intermediate_data_description = parsed_response["column_definitions"]
@@ -58,3 +58,10 @@ def extract_python_code(response: str) -> str:
         response = response[1].split("```")
         return response[0].strip()
     return response.strip()
+
+def extract_json(response: str) -> str:
+    response = response.split("```json")
+    if len(response) > 1:
+        response = response[1].split("```")
+        return json.loads(response[0].strip())
+    return json.loads(response.strip())

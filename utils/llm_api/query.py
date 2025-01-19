@@ -14,18 +14,18 @@ class QueryProvider():
     Given an objective %s and data description: %s, decompose the problem into 'transform' and 'visualize' subproblems. 
     Output must be dictionary with keys ('transform', 'visualize', 'column_definitions') and values like the following:
     {
-        "transform": "Describe in detail part of objective that transforms the data. Include column names and operations.",
-        "visualize": "Describe in detail part of objective that visualizes the data. Include column names and operations.",
+        "transform": "Describe in detail part of objective that transforms the data. Include column names and operations. Don't include any code.",
+        "visualize": "Describe in detail part of objective that visualizes the data. Include column names and operations. Don't include any code.",
         "column_definitions": "List of column definitions after transformation."
     }
-    Response should only be in JSON format. DO NOT include anything else in the response.
+    Response should only be in JSON format. DO NOT include anything else in the response. Output format must be '''json<content>'''.
     """
     
     prompt_queries[QueryType.TRANSFORM] = """
     You are working on a LUCAS-SOIL-2018 dataset that is stored in a CSV file in './data/LUCAS-SOIL-2018.csv'.
     You are responsible only for the transformation part of the data. DO NOT INCLUDE VISUALIZATION.
-    Given an input dataframe description: %s, a transformation description: %s, the expected output format: %s, and a list of Pandas functions: %s, return only Python code to perform the transformation. 
-    Return only the Python code that solves transformation. Final dataframe must be in variable named 'final_dataframe' and the dataframe must be according to expected output format. DO NOT include anything else except Python code. Output format must be '''python<code>'''.
+    Data is loaded into dataframe called data. Given an input dataframe description: %s, a transformation description: %s, the expected output format: %s, and a list of Pandas functions: %s, return only Python code containig transform function to perform the transformation. 
+    Return only the Python code that solves transformation as ```python <content>```. Final dataframe must be in variable named 'final_dataframe' and the dataframe must be according to expected output format. DO NOT include anything else except Python code. Output format must be '''python<code>'''.
     """
     # """
     # This is part of the data transformation query.
@@ -36,7 +36,7 @@ class QueryProvider():
     You are working on a LUCAS-SOIL-2018 dataset that is stored in a CSV file in './data/LUCAS-SOIL-2018.csv'.
     You are responsible only for the visualization part of the data. DO NOT INCLUDE TRANSFORMATION.
     The data has been transformed and is stored in a variable named 'final_dataframe'.
-    Given a description of input dataframe: %s, description of needed visualization: %s, and list of Pandas functions: %s, return only Python code to perform the visualization. Save it as plot.png. DO NOT include anything else except Python code. Output format must be '''python<code>'''.
+    Given a description of 'final_dataframe': %s, description of needed visualization: %s, and list of Pandas functions: %s, return only Python code to perform the visualization. Save it as plot.png. DO NOT include anything else except Python code. Output format must be '''python<code>'''.
     """
     
     
