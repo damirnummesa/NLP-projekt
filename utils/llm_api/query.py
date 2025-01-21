@@ -10,39 +10,80 @@ class QueryProvider():
     prompt_queries = {}
     
     prompt_queries[QueryType.INITIAL] = """
-    You are working on a LUCAS-SOIL-2018 dataset that is stored in a CSV file in './data/LUCAS-SOIL-2018.csv'.
-    Given an objective %s and data description: %s, decompose the problem into 'transform' and 'visualize' subproblems. 
-    Output must be dictionary with keys ('transform', 'visualize', 'column_definitions') and values like the following:
-    {
-        "transform": "Describe in detail part of objective that transforms the data. Include column names and operations. Don't include any code.",
-        "visualize": "Describe in detail part of objective that visualizes the data. Include column names and operations. Don't include any code.",
-        "column_definitions": "List of column definitions after transformation."
-    }
-    Response should only be in JSON format. DO NOT include anything else in the response. Output format must be '''json<content>'''.
-    """
-    
-    prompt_queries[QueryType.TRANSFORM] = """
-    You are working on a LUCAS-SOIL-2018 dataset that is stored in a CSV file in './data/LUCAS-SOIL-2018.csv'.
-    You are responsible only for the transformation part of the data. DO NOT INCLUDE VISUALIZATION.
-    Data is loaded into dataframe called data. Given an input dataframe description: %s, a transformation description: %s, the expected output format: %s, and a list of Pandas functions: %s, return only Python code containig transform function to perform the transformation. 
-    Return only the Python code that solves transformation as ```python <content>```. Final dataframe must be in variable named 'final_dataframe' and the dataframe must be according to expected output format. DO NOT include anything else except Python code. Output format must be '''python<code>'''.
-    """
-    # """
-    # This is part of the data transformation query.
-    # Given a description of input dataframe: %s, description of needed transformation: %s, expected output format: %s and list of Pandas functions that can applied to the data: %s, return only Python code that transforms the data. 
-    # """
-    
-    prompt_queries[QueryType.VISUALIZE] = """
-    You are working on a LUCAS-SOIL-2018 dataset that is stored in a CSV file in './data/LUCAS-SOIL-2018.csv'.
-    You are responsible only for the visualization part of the data. DO NOT INCLUDE TRANSFORMATION.
-    The data has been transformed and is stored in a variable named 'final_dataframe'.
-    Given a description of 'final_dataframe': %s, description of needed visualization: %s, and list of Pandas functions: %s, return only Python code to perform the visualization. Save it as plot.png. DO NOT include anything else except Python code. Output format must be '''python<code>'''.
-    """
-    
-    
+    You are working with the LUCAS-SOIL-2018 dataset that contains data from Europe.
+    LUCAS-SOIL-2018 dataset is loaded into a geopandas GeoDataFrame called 'data_gdf'.
+    Given:
+    1. An objective: %s
+    2. A description of the 'data_gdf' GeoDataFrame: %s
+    Decompose the objective into two subproblems: 'transform' and 'visualize'. 
 
+    Your response must be a dictionary with the following structure:
+    {
+        "transform": "A single string describing, in detail, the part of the objective that transforms the data. Results are in 'transformed_gdf' GeoDataFrame. Include specific column names and operations. Do NOT include any code.",
+        "visualize": "A single string describing, in detail, the part of the objective that visualizes specified data from 'transformed_gdf' GeoDataFrame. Visualizations may include printing some result, outputting graphs or overlaying some data on map of Europe. Include specific column names and operations. Do NOT include any code."
+    }
+
+    **Output Requirements:**
+    - Response must ONLY be in JSON format.
+    - Use the exact format: '''json<content>'''
+    - DO NOT include anything else in the response.
+    """
+
+    prompt_queries[QueryType.TRANSFORM] = """
+    You are working with the LUCAS-SOIL-2018 dataset that contains data from Europe.
+    LUCAS-SOIL-2018 dataset is loaded into a geopandas GeoDataFrame called 'data_gdf'.
+    Your task is to handle ONLY the transformation part of the data. DO NOT include visualization.
+
+    Given:
+    1. A description of the 'data_gdf' GeoDataFrame: %s
+    2. A detailed transformation description: %s
+    3. A list of available functions: %s
+
+    Write Python code to perform the required transformation. Follow these rules:
+    - Store the transformed data in a variable called 'transformed_data', always keep geometry column.
+    - Map of Europe is loaded as 'europe_gdf' GeoDataFrame.
+    - Use only the provided descriptions and functions to guide the transformation.
+    - Write all code outside of functions.
+    - Result of the transformation should be a 'transformed_data' GeoDataFrame.
+    - DO NOT create additional data or output anything.
+    - Write ONLY the code necessary for the transformation. 
+
+    **Output Requirements:**
+    - Return only Python code in the format: '''python<code>'''
+    - DO NOT include anything else in the response.
+    """
+
+    prompt_queries[QueryType.VISUALIZE] = """
+    You are working with a transformed LUCAS-SOIL-2018 dataset that contains data from Europe. 
+    Transformed LUCAS-SOIL-2018 dataset is loaded into a geopandas GeoDataFrame called 'transformed_data'.
+    Your task is to handle ONLY the visualization part of the data. DO NOT include transformation.
+
+    Given:
+    1. A description of the 'transformed_data' GeoDataFrame: %s
+    2. A description of the 'europe_gdf' GeoDataFrame: %s
+    2. A detailed visualization description: %s
+    3. A list of available functions: %s
+
+    Write Python code to perform the required visualization. Follow these rules:   
+    - Start with 'transformed_data' GeoDataFrame. 
+    - Don't load map of Europe, it is already loaded as 'europe_gdf' GeoDataFrame.
+    - 'europe_gdf' GeoDataFrame contains only borders of countries as polygons and should be only used as base map.
+    - When visualizing data on a map, set 'europe_gdf' as the base map with following line: europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray').
+    - When plotting on map, if no specific column is mentioned visualize only data location with following line: transformed_data.plot(ax=ax, markersize=5, ...).
+    - Add legends, titles, and labels as needed for better visualization.
+    - Use only the provided descriptions and functions to guide the visualization.
+    - Write all code outside of functions.
+    - DO NOT include transformation or unrelated operations.
+    - Write ONLY the code necessary for the visualization.
+
+    **Output Requirements:**
+    - Return only Python code in the format: '''python<code>'''
+    - DO NOT include anything else in the response.
+    """
+
+    
     @staticmethod
-    def get_query(query_type: QueryType, objective: str, data_description: str = None, functions: list[str]=None, intermediate_data_description: str = None) -> str:
+    def get_query(query_type: QueryType, objective: str, data_description: str = None, functions: list[str]=None, intermediate_data_description: str = None, europe_gdf_description: str = None) -> str:
         assert query_type in QueryType
         assert objective is not None
         
@@ -52,12 +93,12 @@ class QueryProvider():
         elif query_type in [QueryType.TRANSFORM]:
             assert data_description is not None
             assert functions is not None
-            assert intermediate_data_description is not None
-            return QueryProvider.prompt_queries[query_type] % (data_description, objective, intermediate_data_description, functions)
+            return QueryProvider.prompt_queries[query_type] % (data_description, objective, functions)
         elif query_type in [QueryType.VISUALIZE]:
             assert functions is not None
             assert intermediate_data_description is not None
-            return QueryProvider.prompt_queries[query_type] % (intermediate_data_description, objective, functions)
+            assert europe_gdf_description is not None
+            return QueryProvider.prompt_queries[query_type] % (intermediate_data_description, europe_gdf_description, objective, functions)
             
     def wrap_with_instruction(query: str) -> str:
         return f"[INST]\n{query}\n[/INST]"

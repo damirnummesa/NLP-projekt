@@ -1,0 +1,18 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	transformed_data = data_gdf.groupby('LC0_Desc')['OC'].mean().reset_index()
+	transformed_data.columns = ['land_type', 'average_OC']
+	transformed_data['geometry'] = None
+	for index, row in transformed_data.iterrows():
+	    transformed_data.loc[index, 'geometry'] = data_gdf[data_gdf['LC0_Desc'] == row['land_type']]['geometry'].iloc[0]
+	transformed_data.head()
+	fig, ax = plt.subplots(figsize=(10, 8))
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	transformed_data['average_OC'].value_counts().plot(kind='bar')
+	plt.title('Average Organic Carbon (OC) by Land Type')
+	ax.set_xlabel('Land Type')
+	ax.set_ylabel('Count')
+	legend = ax.legend()
+	plt.show()
+	transformed_data.plot(ax=ax, markersize=5)
+	plt.legend(labels=['Country Borders', 'Data Points'], loc='upper right')
+	plt.show()

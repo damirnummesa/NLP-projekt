@@ -1,0 +1,8 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	transformed_data = data_gdf[['pH_H2O', 'K']].copy()
+	fig, ax = plt.subplots(figsize=(10, 8))
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	transformed_data.plot(ax=ax, markersize=5)
+	ax.set_title('Relationship between pH_H2O and K across Europe')
+	ax.legend()
+	plt.show()

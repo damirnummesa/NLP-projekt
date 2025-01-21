@@ -1,0 +1,12 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	transformed_data = data_gdf[(data_gdf['LC0_Desc'].isin(['Grassland', 'Woodland'])) & (data_gdf['OC'] > 20)]
+	data = transformed_data.copy()
+	fig, ax = plt.subplots(figsize=(10, 10))
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	data.plot(ax=ax, markersize=5)
+	ax.set_title('European Soil Data')
+	ax.set_xlabel('Longitude')
+	ax.set_ylabel('Latitude')
+	plt.legend()
+	fig.savefig("european_soil_data.png")
+	plt.show()

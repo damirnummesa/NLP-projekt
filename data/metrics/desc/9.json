@@ -1,0 +1,11 @@
+{
+    "MODEL_ID": "",
+    "METEOR": 0.29929550235090324,
+    "ROUGE_1": 0.1509433962264151,
+    "ROUGE_2": 0.038461538461538464,
+    "ROUGE_L": 0.1320754716981132,
+    "BLEU": 0.014558491217854977,
+    "CosineSimilarity": 0.06588078458684124,
+    "ASTComparison": 0,
+    "LevenshteinDistance": 11
+}

@@ -1,0 +1,11 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	transformed_data = data_gdf[data_gdf['LC0_Desc'] == 'Woodland']
+	fig, ax = plt.subplots(figsize=(12, 10), dpi=300)
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	ax.scatter(transformed_data.geometry.x, transformed_data.geometry.y, s=5)
+	plt.title('Geographical distribution of woodland areas across Europe')
+	plt.xlabel('Longitude (x)')
+	plt.ylabel('Latitude (y)')
+	legend = ax.legend()
+	ax.add_artist(legend)
+	plt.savefig('woodland_points_europe.png', bbox_inches='tight', dpi=300, facecolor='w')
