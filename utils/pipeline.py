@@ -25,7 +25,7 @@ def clean_python_code(code_string):
     Removes comments, import statements, and print statements from a Python code string.
     """
     # Remove comments (single-line and multi-line)
-    code_string = re.sub(r'#.*', '', code_string)  # Single-line comments
+    # code_string = re.sub(r'#.*', '', code_string)  # Single-line comments
     code_string = re.sub(r'""".*?"""|\'\'\'.*?\'\'\'', '', code_string, flags=re.DOTALL)  # Multi-line comments
 
     # Remove import statements
@@ -41,7 +41,7 @@ def clean_python_code(code_string):
 
 def get_description_extraction_function_string(cleaned_transform_code: str) -> str:
     get_transformed_data_description_header = "def get_transformed_data_description(data_gdf: gpd.GeoDataFrame) -> str:"
-    description_extraction_code = """\n\tbuffer = io.StringIO()\n\ttransformed_data.info(buf=buffer)\n\tintermediate_data_description = buffer.getvalue()\n\treturn intermediate_data_description
+    description_extraction_code = """\n\tbuffer = io.StringIO()\n\ttransformed_gdf.info(buf=buffer)\n\tintermediate_data_description = buffer.getvalue()\n\treturn intermediate_data_description
     """
 
     description_extraction_function = (
