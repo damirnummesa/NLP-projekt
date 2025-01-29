@@ -9,7 +9,7 @@ from typing import Dict
 from nltk.tokenize import word_tokenize
 import nltk
 
-from models.metrics import MetricsResult
+from utils.metrics import MetricsResult
 
 nltk.download('wordnet') ## run only once, data needed for tokenizer
 nltk.download('omw-1.4') ## run only once, data needed for tokenizer

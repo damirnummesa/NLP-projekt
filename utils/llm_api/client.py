@@ -57,7 +57,7 @@ class GPT4AllClient:
             
         return available_model_ids
     
-    def query(self, prompt: str, max_tokens: int = 1000, temperature: float = 0.7) -> Optional[str]:
+    def query(self, prompt: str, max_tokens: int = 2048, temperature: float = 0.2) -> Optional[str]:
         """Fetch chat completion response of the specified model for the given message and execution parameters"""
         try:
             message = GPT4AllMessage(content=prompt, role='user')
