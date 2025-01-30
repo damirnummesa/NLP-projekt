@@ -1,0 +1,37 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import geopandas as gpd
+	# Filter the data to include only rows where LC0_Desc is not null and Depth is in ['0_10', '20_30']
+	transformed_gdf = data_gdf[(data_gdf['LC0_Desc'].notnull()) & (data_gdf['Depth'].isin(['0_10', '20_30']))]
+	# Group the transformed GeoDataFrame by LC0_Desc, aggregate on geometry and count
+	soil_types_count = transformed_gdf.groupby('LC0_Desc')['geometry'].count().reset_index()
+	# Merge soil types with their counts into a new column in the original data
+	data_gdf['Soil_Type_Count'] = data_gdf['LC0_Desc'].map(soil_types_count.set_index('LC0_Desc')['geometry'])
+	# Create a dictionary to map each LC0_Desc value to its corresponding color
+	color_map = {
+	    'Agricultural land': '#008000',
+	    'Arable land': '#FFD700',
+	    'Permanent crops': '#33CC00',
+	    # Add more soil types and their colors as needed...
+	}
+	# Map the Soil_Type_Count column values with their respective colors using a dictionary
+	data_gdf['Soil_Color'] = data_gdf['LC0_Desc'].map(color_map)
+	# Create a new GeoDataFrame to store the transformed results
+	transformed_gdf = gpd.GeoDataFrame(data_gdf, geometry='geometry')
+	import matplotlib.pyplot as plt
+	# Create figure and axis objects for plotting
+	fig, ax = plt.subplots(figsize=(10, 8))
+	# Set europe_gdf as the base map with black borders and light gray fill
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Plot data locations from 'transformed_gdf' on top of the base map,
+	# using a different color for each soil type (LC0_Desc)
+	cmap = plt.cm.tab20  # Use a qualitative colormap with 20 colors
+	norm = plt.Normalize(vmin=0, vmax=len(transformed_gdf['LC0_Desc'].unique()))
+	ax.scatter(transformed_gdf.geometry.x, transformed_gdf.geometry.y,
+	          c=[cmap(i) for i in range(len(transformed_gdf))],
+	          cmap=cmap)
+	# Add title and labels to the plot
+	plt.title('Soil Types in Europe')
+	ax.set_xlabel('Longitude (°)')
+	ax.set_ylabel('Latitude (°)')
+	# Save the map as a PNG file
+	fig.savefig('soil_types_europe.png', bbox_inches='tight')

@@ -1,0 +1,25 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import necessary libraries
+	import pandas as pd
+	from sklearn.cluster import KMeans
+	# Select columns of interest (TH_LAT, TH_LONG) to perform KMeans clustering
+	kmeans_input_df = data_gdf[['TH_LAT', 'TH_LONG']].copy()
+	# Perform KMeans clustering with 3 clusters on the selected columns
+	kmeans_model = KMeans(n_clusters=3)
+	cluster_labels = kmeans_model.fit_predict(kmeans_input_df)
+	# Add cluster labels to the original GeoDataFrame for further analysis or transformation
+	data_gdf['Cluster'] = cluster_labels
+	# Store transformed results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = data_gdf.copy()
+	import matplotlib.pyplot as plt
+	# Create figure and axis objects for plotting
+	fig, ax = plt.subplots(figsize=(10, 8))
+	# Perform KMeans clustering on TH_LAT and TH_LONG data to identify 3 clusters
+	from sklearn.cluster import KMeans
+	kmeans = KMeans(n_clusters=3)
+	transformed_gdf['Cluster'] = kmeans.fit_predict(transformed_gdf[['TH_LAT', 'TH_LONG']])
+	# Set the map of Europe as the base layer
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Plot data locations from transformed_gdf with cluster information used for coloring
+	transformed_gdf.plot(ax=ax, column='Cluster', legend=True)
+	plt.savefig('clusters_map.png')

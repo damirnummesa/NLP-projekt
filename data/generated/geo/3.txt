@@ -1,0 +1,18 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data for LC0_Desc=Woodland & pH<6 in Europe
+	transformed_gdf = data_gdf[(data_gdf['LC0_Desc'] == 'Woodland') & (data_gdf['pH_H2O'] < 6)]
+	import matplotlib.pyplot as plt
+	# Create figure and axis objects
+	fig, ax = plt.subplots(figsize=(10, 8))
+	# Set europe_gdf as the base map
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Filter data from 'transformed_gdf' based on LC0_Desc=Woodland & pH<6
+	filtered_data = transformed_gdf[(transformed_gdf['LC0_Desc'] == 'Woodland') & (transformed_gdf['pH_H2O'] < 6)]
+	# Plot the filtered points with a meaningful style
+	filtered_data.plot(ax=ax, marker='o', markersize=5, color='red')
+	# Set title and labels for better visualization
+	ax.set_title('Points in Woodlands with pH<6')
+	ax.set_xlabel('Longitude (°)')
+	ax.set_ylabel('Latitude (°)')
+	# Show the plot
+	plt.show()

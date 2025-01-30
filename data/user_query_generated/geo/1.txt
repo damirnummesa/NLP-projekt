@@ -1,9 +1,0 @@
-def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	transformed_data = data_gdf[(data_gdf['pH_CaCl2'] > 6)].copy()
-	fig, ax = plt.subplots(figsize=(10, 8), dpi=100)
-	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	filtered_points = transformed_data[transformed_data['pH_CaCl2'] > 6]
-	filtered_points.plot(ax=ax, column='pH_CaCl2', cmap='viridis', markersize=5)
-	ax.set_title('Points with pH_CaCl2 > 6 in Europe')
-	plt.legend()
-	plt.show()

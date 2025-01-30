@@ -10,10 +10,10 @@ def clean_python_code(code_string):
     code_string = re.sub(r'""".*?"""|\'\'\'.*?\'\'\'', '', code_string, flags=re.DOTALL)  # Multi-line comments
 
     # Remove import statements
-    code_string = re.sub(r'^\s*import .*|^\s*from .* import .*', '', code_string, flags=re.MULTILINE)
+    # code_string = re.sub(r'^\s*import .*|^\s*from .* import .*', '', code_string, flags=re.MULTILINE)
 
     # Remove print statements
-    code_string = re.sub(r'^\s*print\(.*\)\s*$', '', code_string, flags=re.MULTILINE)
+    # code_string = re.sub(r'^\s*print\(.*\)\s*$', '', code_string, flags=re.MULTILINE)
 
     # Remove empty lines caused by the removals
     code_string = re.sub(r'\n\s*\n', '\n', code_string)

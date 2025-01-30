@@ -1,0 +1,11 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data to include only points with pH_CaCl2 > 6.0
+	transformed_gdf = data_gdf.copy()
+	filtered_points = transformed_gdf[transformed_gdf['pH_CaCl2'] > 6.0]
+	import matplotlib.pyplot as plt
+	transformed_gdf[transformed_gdf['pH_CaCl2'] > 6].plot(column='geometry', color='red')
+	plt.title('Points with pH_CaCl2 > 6')
+	plt.xlabel('Longitude (°)')
+	plt.ylabel('Latitude (°)')
+	plt.legend()
+	plt.savefig('points_with_pH_CaCl2_greater_than_6.png')

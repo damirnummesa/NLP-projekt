@@ -1,0 +1,12 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data for LC0_Desc=Woodland and keep only Europe's points
+	transformed_gdf = data_gdf[data_gdf['LC0_Desc'] == 'Woodland']
+	import matplotlib.pyplot as plt
+	# Create figure and axis objects
+	fig, ax = plt.subplots(figsize=(10, 8))
+	# Set europe_gdf as the base map
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Overlay data from 'transformed_gdf' on the map
+	transformed_gdf[transformed_gdf['LC0_Desc'] == 'Woodland'].plot(ax=ax, marker='o', markersize=5, color='green')
+	ax.set_title('Woodlands in Europe')
+	plt.show()

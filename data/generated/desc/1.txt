@@ -1,0 +1,39 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data to include only rows where pH_H2O is not null and LC0_Desc is not empty
+	transformed_gdf = data_gdf.dropna(subset=['pH_H2O'])
+	transformed_gdf = transformed_gdf[~transformed_gdf['LC0_Desc'].isnull()]
+	# Group the data by 'LC0_Desc' and calculate the mean of 'pH_H2O'
+	grouped_data = transformed_gdf.groupby('LC0_Desc')['pH_H2O'].mean().reset_index()
+	# Sort the grouped data in descending order based on the calculated means
+	sorted_data = grouped_data.sort_values(by='pH_H2O', ascending=False)
+	# Select only the 'LC0_Desc' with the highest mean pH_H2O value
+	max_pH_land_type = sorted_data.iloc[0]['LC0_Desc']
+	import matplotlib.pyplot as plt
+	transformed_gdf['LC0_Desc'].value_counts().nlargest(10).plot(kind='bar', xticks=range(len(transformed_gdf['LC0_Desc'].unique())), figsize=(12, 6))
+	plt.title('Top Land Types by pH_H2O')
+	plt.xlabel('Land Type (LC0)')
+	plt.ylabel('Count of Samples with Highest pH_H2O Value')
+	plt.xticks(rotation=90)
+	plt.tight_layout()
+	plt.show()
+	transformed_gdf.loc[transformed_gdf['pH_H2O'] == transformed_gdf['pH_H2O'].max()]['LC0_Desc'].value_counts().plot(kind='bar', figsize=(8, 6))
+	plt.title('Land Type with Highest pH_H2O Value')
+	plt.xlabel('Land Type (LC0)')
+	plt.ylabel('Count of Samples')
+	plt.xticks(rotation=90)
+	plt.tight_layout()
+	plt.show()
+	transformed_gdf.loc[transformed_gdf['pH_H2O'] == transformed_gdf['pH_H2O'].max()][['LC0_Desc', 'pH_H2O']].plot(kind='barh', xticks=range(len(transformed_gdf['LC0_Desc'].unique())), figsize=(12, 6))
+	plt.title('Land Type with Highest pH_H2O Value')
+	plt.xlabel('pH_H2O')
+	plt.ylabel('Land Type (LC0)')
+	plt.yticks(rotation=90)
+	plt.tight_layout()
+	plt.show()
+	transformed_gdf.loc[transformed_gdf['pH_H2O'] == transformed_gdf['pH_H2O'].max()][['LC0_Desc', 'pH_H2O']].plot(kind='scatter', x='LC0_Desc', y='pH_H2O', figsize=(12, 6))
+	plt.title('Land Type with Highest pH_H2O Value')
+	plt.xlabel('Land Type (LC0)')
+	plt.ylabel('pH_H2O')
+	for i in transformed_gdf.loc[transformed_gdf['pH_H2O'] == transformed_gdf['pH_H2O'].max()]['LC0_Desc']:
+	    plt.annotate(i, (i, 8))
+	plt.show()

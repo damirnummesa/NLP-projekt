@@ -1,0 +1,30 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	from scipy import stats
+	# Calculate z-scores for 'EC' and identify any outliers (z-score > 3 or < -3)
+	transformed_gdf = data_gdf.copy()
+	transformed_gdf['EC_z_score'] = stats.zscore(transformed_gdf['EC'])
+	outliers_mask = abs(transformed_gdf['EC_z_score']) > 3
+	transformed_gdf.loc[outliers_mask, 'is_outlier'] = True
+	# Filter for outliers and store the result in a new GeoDataFrame called 'filtered_gdf'
+	filtered_gdf = transformed_gdf[~outliers_mask].copy()
+	# Store the original data with z-scores but without filtering in another GeoDataFrame
+	transformed_data_only_z_scores = transformed_gdf.copy()
+	import matplotlib.pyplot as plt
+	# Calculate z-scores for 'EC'
+	transformed_gdf['EC_z_score'] = (transformed_gdf['EC'] - transformed_gdf['EC'].mean()) / transformed_gdf['EC'].std()
+	# Identify outliers (z-score > 3 or < -3)
+	transformed_gdf.loc[abs(transformed_gdf['EC_z_score']) > 3, 'is_outlier'] = True
+	# Plot EC vs z-scores
+	plt.figure(figsize=(10,6))
+	sns.scatterplot(x='EC', y='EC_z_score', data=transformed_gdf)
+	# Highlight outliers with red dots and a different marker style
+	outliers = transformed_gdf[abs(transformed_gdf['EC_z_score']) > 3]
+	sns.scatterplot(x=outliers['EC'], y=outliers['EC_z_score'], data=outliers, color='red', marker='x')
+	plt.title('Electrical Conductivity (EC) vs Z-Scores')
+	plt.xlabel('EC (μS/cm)')
+	plt.ylabel('Z-scores')
+	plt.axhline(y=3, color='black', linestyle='--')
+	plt.axhline(y=-3, color='black', linestyle='--')
+	plt.legend(['Non-outliers', 'Outliers'])
+	plt.show()

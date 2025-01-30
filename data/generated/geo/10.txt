@@ -1,0 +1,24 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the GeoDataFrame to include only LC0_Desc='Grassland' and LC0_Desc='Woodland'
+	filtered_gdf = data_gdf[(data_gdf['LC0_Desc'] == 'Grassland') | (data_gdf['LC0_Desc'] == 'Woodland')]
+	# Filter the filtered GeoDataFrame to include only points where OC > 20
+	transformed_gdf = filtered_gdf[filtered_gdf['OC'] > 20]
+	import matplotlib.pyplot as plt
+	# Create figure and axis objects
+	fig, ax = plt.subplots(figsize=(10, 8))
+	# Set europe_gdf as the base map
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Filter data from transformed_gdf to plot only LC0_Desc='Grassland' and LC0_Desc='Woodland'
+	filtered_data = transformed_gdf[(transformed_gdf['LC0_Desc'] == 'Grassland') | (transformed_gdf['LC0_Desc'] == 'Woodland')]
+	filtered_data.plot(ax=ax, markersize=10)
+	# Filter data from filtered_data to plot only where OC > 20
+	filtered_OC = filtered_data[filtered_data['OC']>20]
+	# Plot the filtered data with a different color and marker size for better visibility
+	filtered_OC.plot(ax=ax, column='LC0_Desc', legend=False, markersize=15, colormap='Set1')
+	# Set title and labels for the plot
+	ax.set_title('Grasslands and Woodlands in Europe with OC > 20')
+	ax.set_xlabel('')
+	ax.set_ylabel('')
+	# Save the plot as a PNG file
+	fig.savefig('europe_map.png', bbox_inches='tight')
+	plt.show()

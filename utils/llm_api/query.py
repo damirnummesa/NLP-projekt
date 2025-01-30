@@ -32,7 +32,9 @@ class QueryProvider():
     """
     
     prompt_queries[QueryType.TRANSFORM] = """
-    You are a code generation model specialized in transforming geospatial data stored in a GeoDataFrame (data_gdf). 
+    You are a code generation model specialized in transforming geospatial data stored in a GeoDataFrame ('data_gdf'). 
+    All data stored in 'data_gdf' is from Europe.
+    You are focused on filtering and transforming data, you DO NOT perform any visualizations, print outs or outputs.
     Based on the objective, your task is to provide only the Python code required to perform the specified transformations.
 
     Objective:
@@ -51,18 +53,19 @@ class QueryProvider():
     import sklearn as sk 
 
     Instructions:
-    All transformations should be performed on the GeoDataFrame data_gdf.
+    All transformations should be performed on the GeoDataFrame 'data_gdf'.
     If given multiple filtering conditions, apply them sequentially in different code blocks.
     Write only the Python code required for the transformation.
     Do not create any additional functions.
-    Ignore any instructions for outputting, displaying, or saving the results.
-    Store the transformed results in a new GeoDataFrame called transformed_gdf.
+    Store the transformed results in a new GeoDataFrame called 'transformed_gdf'.
     Ensure the code is concise, valid, and leverages the appropriate packages listed above.
-    Avoid any additional explanations or comments in the code.
+    Ignore any instructions for outputting, displaying, visualizing or saving the results.
     """
     
     prompt_queries[QueryType.TRANSFORM_ERROR] = """
-    You are a code generation model specialized in transforming geospatial data stored in a GeoDataFrame (data_gdf). 
+    You are a code generation model specialized in transforming geospatial data stored in a GeoDataFrame ('data_gdf'). 
+    All data stored in 'data_gdf' is from Europe.
+    You are focused on filtering and transforming data, you DO NOT perform any visualizations, print outs or outputs.
     Based on the objective, your task is to provide only the Python code required to perform the specified transformations.
 
     Objective:
@@ -87,41 +90,40 @@ class QueryProvider():
     import sklearn as sk 
 
     Instructions:
-    All transformations should be performed on the GeoDataFrame data_gdf.
+    All transformations should be performed on the GeoDataFrame 'data_gdf'.
     If given multiple filtering conditions, apply them sequentially in different code blocks.
     Write only the Python code required for the transformation.
     Do not create any additional functions.
-    Ignore any instructions for outputting, displaying or saving the results.
-    Store the transformed results in a new GeoDataFrame called transformed_gdf.
+    Store the transformed results in a new GeoDataFrame called 'transformed_gdf'.
     Ensure the code is concise, valid, and leverages the appropriate packages listed above.
-    Avoid any additional explanations or comments in the code.
+    Ignore any instructions for outputting, displaying, visualizing or saving the results.
     """
 
     prompt_queries[QueryType.VISUALIZE_PRINT] = """
-    You are a code generation model specialized in printing results for transformed geospatial data stored in the GeoDataFrame transformed_gdf.
+    You are a code generation model specialized in printing results for transformed geospatial data stored in the GeoDataFrame 'transformed_gdf'.
 
     Query Context:
     Initial query: %s
     
-    Data has already been transformed and is available in transformed_gdf.
-    The GeoDataFrame has the following structure based on transformed_gdf.info():
+    Data has already been transformed and is available in 'transformed_gdf'.
+    The GeoDataFrame has the following structure based on 'transformed_gdf.info()':
     %s
     
     Instructions:
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
     Focus solely on printing the transformed data in a meaningful and concise way based on the query results.
-    Provide only the code required to print the result. Avoid any additional comments or explanations.
+    Provide only the code required to print the result.
     """
     
     prompt_queries[QueryType.VISUALIZE_PRINT_ERROR] = """
-    You are a code generation model specialized in printing results for transformed geospatial data stored in the GeoDataFrame transformed_gdf.
+    You are a code generation model specialized in printing results for transformed geospatial data stored in the GeoDataFrame 'transformed_gdf'.
 
     Query Context:
     Initial query: %s
     
-    Data has already been transformed and is available in transformed_gdf.
-    The GeoDataFrame has the following structure based on transformed_gdf.info():
+    Data has already been transformed and is available in 'transformed_gdf'.
+    The GeoDataFrame has the following structure based on 'transformed_gdf.info()':
     %s
     
     Previously outputed incorrect code:
@@ -134,18 +136,18 @@ class QueryProvider():
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
     Focus solely on printing the transformed data in a meaningful and concise way based on the query results.
-    Provide only the code required to print the result. Avoid any additional comments or explanations.
+    Provide only the code required to print the result.
     """
     
 
     prompt_queries[QueryType.VISUALIZE_GRAPH] = """
-    You are a code generation model specialized in creating data visualizations for transformed geospatial data stored in the GeoDataFrame transformed_gdf.
+    You are a code generation model specialized in creating data visualizations for transformed geospatial data stored in the GeoDataFrame 'transformed_gdf'.
 
     Query Context:
     Initial query: %s
     
-    Data has already been transformed and is available in transformed_gdf.
-    The GeoDataFrame has the following structure based on transformed_gdf.info():
+    Data has already been transformed and is available in 'transformed_gdf'.
+    The GeoDataFrame has the following structure based on 'transformed_gdf.info()':
     %s
     
     Available Python Packages:
@@ -159,17 +161,17 @@ class QueryProvider():
     Focus solely on generating a plot or graph based on the transformed data that effectively visualizes the query results.
     The code should only produce the graph without additional comments or explanations.
     Ensure the graph conveys meaningful insights through axis labels, titles, and legend when relevant.
-    Provide only the code. Avoid any additional comments or explanations.
+    Provide only the code.
     """
     
     prompt_queries[QueryType.VISUALIZE_GRAPH_ERROR] = """
-    You are a code generation model specialized in creating data visualizations for transformed geospatial data stored in the GeoDataFrame transformed_gdf.
+    You are a code generation model specialized in creating data visualizations for transformed geospatial data stored in the GeoDataFrame 'transformed_gdf'.
 
     Query Context:
     Initial query: %s
     
-    Data has already been transformed and is available in transformed_gdf.
-    The GeoDataFrame has the following structure based on transformed_gdf.info():
+    Data has already been transformed and is available in 'transformed_gdf'.
+    The GeoDataFrame has the following structure based on 'transformed_gdf.info()':
     %s
     
     Previously outputed incorrect code:
@@ -189,19 +191,19 @@ class QueryProvider():
     Focus solely on generating a plot or graph based on the transformed data that effectively visualizes the query results.
     The code should only produce the graph without additional comments or explanations.
     Ensure the graph conveys meaningful insights through axis labels, titles, and legend when relevant.
-    Provide only the code. Avoid any additional comments or explanations.
+    Provide only the code.
     """
     
 
     prompt_queries[QueryType.VISUALIZE_MAP] = """
-    You are a code generation model specialized in creating map-based visualizations for transformed geospatial data stored in the GeoDataFrame transformed_gdf.
+    You are a code generation model specialized in creating map-based visualizations for transformed geospatial data stored in the GeoDataFrame 'transformed_gdf'.
     All data is from Europe.
     
     Query Context:
     Initial query: %s
     
-    Data has already been transformed and is available in transformed_gdf.
-    The GeoDataFrame has the following structure based on transformed_gdf.info():
+    Data has already been transformed and is available in 'transformed_gdf'.
+    The GeoDataFrame has the following structure based on 'transformed_gdf.info()':
     %s
     
     Available Python Packages:
@@ -211,25 +213,25 @@ class QueryProvider():
     Instructions:
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
-    Focus solely on generating a map-based visualization by overlaying data from transformed_gdf on a map of Europe.
-    The map of Europe is already loaded in europe_gdf. It can be set as the base using the following line:
-    europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+    Focus solely on generating a map-based visualization by overlaying data from 'transformed_gdf' on a map of Europe.
+    The map of Europe is already loaded in europe_gdf. europe_gdf can be set as the base of the map using the following line:
+    '''python europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')'''
     
-    Only plot the data locations from transformed_gdf.
+    Only plot the data locations from 'transformed_gdf'.
     Feel free to create fig and ax objects for plotting.
     Other available information from the data can be used to color or style the plotted locations meaningfully.
-    Provide only the code for generating the map, without comments or explanations
+    Provide only the code for generating the visualization overlayed on map.
     """
     
     prompt_queries[QueryType.VISUALIZE_MAP_ERROR] = """
-    You are a code generation model specialized in creating map-based visualizations for transformed geospatial data stored in the GeoDataFrame transformed_gdf.
+    You are a code generation model specialized in creating map-based visualizations for transformed geospatial data stored in the GeoDataFrame 'transformed_gdf'.
     All data is from Europe.
     
     Query Context:
     Initial query: %s
     
-    Data has already been transformed and is available in transformed_gdf.
-    The GeoDataFrame has the following structure based on transformed_gdf.info():
+    Data has already been transformed and is available in 'transformed_gdf'.
+    The GeoDataFrame has the following structure based on 'transformed_gdf.info()':
     %s
     
     Previously outputed incorrect code:
@@ -245,14 +247,14 @@ class QueryProvider():
     Instructions:
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
-    Focus solely on generating a map-based visualization by overlaying data from transformed_gdf on a map of Europe.
-    The map of Europe is already loaded in europe_gdf. It can be set as the base using the following line:
-    europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+    Focus solely on generating a map-based visualization by overlaying data from 'transformed_gdf' on a map of Europe.
+    The map of Europe is already loaded in europe_gdf. europe_gdf can be set as the base using the following line:
+    '''python europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')'''
     
-    Only plot the data locations from transformed_gdf.
+    Only plot the data locations from 'transformed_gdf'.
     Feel free to create fig and ax objects for plotting.
     Other available information from the data can be used to color or style the plotted locations meaningfully.
-    Provide only the code for generating the map, without comments or explanations
+    Provide only the code for generating the visualization overlayed on map.
     """
     
 
