@@ -1,0 +1,16 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the GeoDataFrame to include only points with LC0_Desc='Woodland' and pH_H2O < 6
+	transformed_gdf = data_gdf[(data_gdf['LC0_Desc'] == 'Woodland') & (data_gdf['pH_H2O'] < 6)]
+	# Plot the filtered GeoDataFrame using geopandas
+	import matplotlib.pyplot as plt
+	fig, ax = plt.subplots(figsize=(10, 10))
+	transformed_gdf.plot(ax=ax)
+	plt.title('Woodland points with pH < 6 in Europe')
+	plt.savefig('woodland_points_pH_less_than_6_europe.png')
+	# Ensure the code is concise and valid, leveraging the appropriate packages listed above.
+	import matplotlib.pyplot as plt
+	fig, ax = plt.subplots(figsize=(10, 10))
+	transformed_gdf.plot(ax=ax)
+	plt.title('Woodland points with pH < 6 in Europe')
+	plt.savefig('woodland_points_pH_less_than_6_europe.png')
+	plt.show()

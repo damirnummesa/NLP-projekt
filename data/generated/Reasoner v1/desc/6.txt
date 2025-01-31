@@ -1,0 +1,6 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Calculate summary statistics for all numerical columns in the dataset
+	summary_statistics = data_gdf.describe()
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame(summary_statistics)
+	print(transformed_gdf)

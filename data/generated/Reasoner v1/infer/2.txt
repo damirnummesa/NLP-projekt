@@ -1,0 +1,12 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter data for Austria and France
+	austria_data = data_gdf[data_gdf['Country'] == 'Austria']['N']
+	france_data = data_gdf[data_gdf['Country'] == 'France']['N']
+	# Perform ANOVA to check if there is a significant difference between N in Austria and France
+	f_statistic, p_value = stats.f_oneway(austria_data, france_data)
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'F-Statistic': [f_statistic],
+	    'P-Value': [p_value]
+	})
+	print(transformed_gdf)

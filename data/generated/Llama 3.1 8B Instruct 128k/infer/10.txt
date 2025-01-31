@@ -1,0 +1,26 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import required packages
+	import pandas as pd
+	# Filter the data to include only rows where 'P' and 'K' are not missing values
+	transformed_gdf = data_gdf.dropna(subset=['P', 'K'])
+	# Calculate the correlation between 'P' and 'K'
+	correlation_coefficient, p_value = stats.pearsonr(transformed_gdf['P'], transformed_gdf['K'])
+	import seaborn as sns
+	import matplotlib.pyplot as plt
+	corr_coef = transformed_gdf['P'].corr(transformed_gdf['K'])
+	p_value = scipy.stats.pearsonr(transformed_gdf['P'], transformed_gdf['K'])[1]
+	sns.scatterplot(x='P', y='K', data=transformed_gdf)
+	plt.title('Correlation between P and K')
+	plt.xlabel('Phosphorus (mg/kg)')
+	plt.ylabel('Potassium (meq/100g)')
+	z = np.polyfit(transformed_gdf['P'], transformed_gdf['K'], 1)
+	p = np.poly1d(z)
+	xp = np.linspace(min(transformed_gdf['P']), max(transformed_gdf['P']), 100)
+	plt.plot(xp, p(xp), "r--")
+	if corr_coef > 0:
+	    plt.text(0.7, 0.9, f'Correlation Coefficient: {corr_coef:.2f}\n', transform=plt.gca().transAxes)
+	else:
+	    plt.text(0.7, 0.9, f'Correlation Coefficient: {corr_coef:.2f} (negative correlation)\n', transform=plt.gca().transAxes)
+	plt.text(0.7, 0.85, f'$p$-value: {p_value:.4e}\n', transform=plt.gca().transAxes)
+	plt.legend(['Regression Line'])
+	plt.show()

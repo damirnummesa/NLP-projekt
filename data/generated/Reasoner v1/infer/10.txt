@@ -1,0 +1,9 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Calculate the correlation between 'P' and 'K'
+	correlation, p_value = stats.pearsonr(data_gdf['P'], data_gdf['K'])
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'Correlation': [correlation],
+	    'P-Value': [p_value]
+	})
+	print(transformed_gdf)

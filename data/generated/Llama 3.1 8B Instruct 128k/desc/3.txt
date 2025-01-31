@@ -1,0 +1,22 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter south EU data based on NUTS_0 column
+	south_eu_data = data_gdf[data_gdf['NUTS_0'].str.startswith('ES') | 
+	                         data_gdf['NUTS_0'].str.startswith('IT') |
+	                         data_gdf['NUTS_0'].str.startswith('PT')]
+	# Filter south EU data based on Depth column
+	south_eu_data = south_eu_data[south_eu_data['Depth'] == '10_20']
+	# Calculate average pH for each POINTID in the filtered data
+	average_pH = south_eu_data.groupby(['POINTID'])[['pH_CaCl2', 'pH_H2O']].mean()
+	# Merge the calculated average pH with the original GeoDataFrame on POINTID column
+	transformed_gdf = pd.merge(south_eu_data, average_pH.reset_index(), on='POINTID')
+	import matplotlib.pyplot as plt
+	transformed_gdf['pH'] = (transformed_gdf['pH_CaCl2_x'] + transformed_gdf['pH_H2O_x']) / 2
+	sns.set()
+	plt.figure(figsize=(10,6))
+	g = sns.barplot(x='NUTS_0', y='pH', data=transformed_gdf)
+	plt.title('Average pH by NUTS Region')
+	plt.xlabel('Region')
+	plt.ylabel('Average pH')
+	plt.xticks(rotation=90)
+	plt.tight_layout()
+	plt.show()

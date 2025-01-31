@@ -1,0 +1,29 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import necessary packages
+	import pandas as pd
+	# Calculate z-scores for 'EC' and identify any outliers (z-score > 3 or < -3)
+	transformed_gdf = data_gdf.copy() # Create a copy of the original GeoDataFrame to avoid modifying it directly
+	transformed_gdf['EC_z_score'] = stats.zscore(transformed_gdf['EC']) # Calculate z-scores for 'EC'
+	outliers_mask = (abs(transformed_gdf['EC_z_score']) > 3) # Identify outliers with a z-score greater than 3 or less than -3
+	transformed_gdf.loc[outliers_mask, 'is_outlier'] = True # Mark the outlier rows in a new column
+	# Filter data to include only countries from Europe (NUTS_0 == 'EU')
+	european_countries = transformed_gdf[transformed_gdf['NUTS_0'].str.startswith('EU')]
+	transformed_gdf = european_countries.copy() # Update the GeoDataFrame with European countries
+	import matplotlib.pyplot as plt
+	transformed_gdf['EC_z_score'] = (transformed_gdf['EC'] - transformed_gdf['EC'].mean()) / transformed_gdf['EC'].std()
+	transformed_gdf.loc[transformed_gdf['is_outlier'] == 'True', 'is_outlier'] = True
+	transformed_gdf.loc[(transformed_gdf['EC_z_score'] > 3) | (transformed_gdf['EC_z_score'] < -3), 'is_outlier'] = True
+	plt.figure(figsize=(10,6))
+	sns.scatterplot(x='EC', y='Elev', data=transformed_gdf)
+	sns.kdeplot(x='EC', data=transformed_gdf, color='r')
+	plt.title('Z-scores for EC and Outliers Identification')
+	plt.xlabel('Electrical Conductivity (EC)')
+	plt.ylabel('Elevation (m)')
+	plt.legend()
+	plt.show()
+	plt.figure(figsize=(10,6))
+	sns.scatterplot(x='EC_z_score', y='is_outlier', data=transformed_gdf)
+	plt.title('Outliers Distribution in EC Z-scores')
+	plt.xlabel('Z-score for Electrical Conductivity (EC)')
+	plt.ylabel('Is Outlier?')
+	plt.show()

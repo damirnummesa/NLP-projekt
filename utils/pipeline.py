@@ -7,21 +7,23 @@ from typing import Callable, Union
 import re
 import io
 import geopandas as gpd
+
 ## needed for running solution
+import pandas as pd
+import geopandas as gpd
 import matplotlib.pyplot as plt
 import shapely
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 import seaborn as sns
 import scipy
 import sklearn
 import numpy as np
-import pandas as pd
 from sklearn.cluster import KMeans
+import sklearn as sk
+import scipy.stats as stats
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-
 
 def run_pipeline(objective: str, 
                  client_instructor: Union[HuggingFaceLLMClient, GPT4AllClient], 

@@ -1,0 +1,12 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the GeoDataFrame for samples in South EU (NUTS_0 = 'ES')
+	south_eu_gdf = data_gdf[data_gdf['NUTS_0'] == 'ES']
+	# Calculate the average pH_CaCl2 and pH_H2O for the filtered GeoDataFrame
+	average_pH_CaCl2 = south_eu_gdf['pH_CaCl2'].mean()
+	average_pH_H2O = south_eu_gdf['pH_H2O'].mean()
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'Average pH CaCl2': [average_pH_CaCl2],
+	    'Average pH H2O': [average_pH_H2O]
+	})
+	print(transformed_gdf)

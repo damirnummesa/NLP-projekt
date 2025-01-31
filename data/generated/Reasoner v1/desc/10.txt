@@ -1,0 +1,3 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	transformed_gdf = data_gdf.groupby('LC0_Desc')['K'].sum().reset_index()
+	print(transformed_gdf)

@@ -1,0 +1,20 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	# Filter data to only include samples from Europe (NUTS_0 = 'EU')
+	data_gdf = data_gdf[data_gdf['NUTS_0'] == 'EU']
+	# Perform a t-test to determine if the mean K content is significantly different from 2%
+	t_stat, p_val = stats.ttest_ind(data_gdf['K'], [2]*len(data_gdf), equal_var=False)
+	# If the p-value is less than 0.05 (95% significance level), reject the null hypothesis
+	if p_val < 0.05:
+	    print("Rejecting null hypothesis: mean K content is significantly different from 2%.")
+	else:
+	    print("Not rejecting null hypothesis: mean K content is not significantly different from 2%.")
+	# Store transformed results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = data_gdf.copy()
+	import matplotlib.pyplot as plt
+	plt.figure(figsize=(10, 6))
+	sns.histplot(transformed_gdf['K'], kde=True)
+	plt.title('Distribution of K Content')
+	plt.xlabel('K (mg/kg)')
+	plt.ylabel('Frequency')
+	plt.show()

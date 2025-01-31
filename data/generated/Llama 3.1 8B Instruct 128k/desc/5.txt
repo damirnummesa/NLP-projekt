@@ -1,0 +1,21 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data for Slovenia by NUTS_0 column
+	slovenia_data = data_gdf[data_gdf['NUTS_0'] == 'SI']
+	# Select only the rows where Depth is 20-30 cm and Country is Slovenia
+	depth_2020_slovenia = slovenia_data[(slovenia_data['Depth'] == '10_20') & (slovenia_data['Country'] == 'Slovenia')]
+	# Calculate max value of N for Slovenia from the mentioned csv
+	max_n_value = depth_2020_slovenia['N'].max()
+	transformed_gdf = pd.DataFrame({'Max_N_Slovenia': [max_n_value]})
+	import matplotlib.pyplot as plt
+	# Get the max value of 'N' for Slovenia from transformed_gdf
+	max_n_slovenia = transformed_gdf['Max_N_Slovenia'].values[0]
+	# Create a figure and axis object
+	fig, ax = plt.subplots()
+	# Set title and labels
+	ax.set_title('Maximum Value of N in Slovenia')
+	ax.set_xlabel('Value')
+	ax.set_ylabel('Count')
+	# Plot the max value as a bar chart
+	plt.bar(['Max_N_Slovenia'], [max_n_slovenia], color='blue', width=1)
+	# Show the plot
+	plt.show()

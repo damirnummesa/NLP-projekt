@@ -1,0 +1,22 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	# Filter rows where EC is greater than 10
+	filtered_gdf = data_gdf[data_gdf['EC'] > 10]
+	# Calculate the average 'K' for each row in filtered_gdf
+	transformed_gdf = filtered_gdf.groupby('POINTID')['K'].mean().reset_index()
+	import geopandas as gpd
+	# Create a new figure and axis object
+	fig, ax = plt.subplots(figsize=(10, 6))
+	# Plot the map of Europe on the specified axis
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Overlay points from 'transformed_gdf' onto the map with different colors based on their values
+	ax.scatter(transformed_gdf['POINTID'], transformed_gdf['K'],
+	           s=10,
+	           c=transformed_gdf['K'] > 10, 
+	           cmap='viridis',
+	           alpha=0.7)
+	# Set title and labels for the plot
+	ax.set_title('Average K Values in Europe')
+	ax.set_xlabel('Point ID')
+	ax.set_ylabel('Elevation (Km)')
+	plt.show()

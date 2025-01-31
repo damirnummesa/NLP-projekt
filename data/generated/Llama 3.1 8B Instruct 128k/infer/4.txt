@@ -1,0 +1,19 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data to include only Grassland and Cropland samples
+	grass_cropland_gdf = data_gdf[data_gdf['LU'] == 'Grassland or cropland']
+	# Select columns of interest for t-test
+	t_test_data = grass_cropland_gdf[['K', 'LC0_Desc']]
+	# Perform a two-sample independent t-test to compare K between Grassland and Cropland
+	from scipy.stats import ttest_ind
+	grass_k_values = [row['K'] for index, row in data_gdf[data_gdf['LU'] == 'Grassland'].iterrows()]
+	cropland_k_values = [row['K'] for index, row in data_gdf[data_gdf['LU'] == 'Cropland'].iterrows()]
+	t_statistic, p_value = ttest_ind(grass_k_values, cropland_k_values)
+	# Create a new GeoDataFrame with the results
+	transformed_gdf = pd.DataFrame({'T-Statistic': [t_statistic], 'P-value': [p_value]})
+	import matplotlib.pyplot as plt
+	plt.figure(figsize=(8,6))
+	sns.barplot(x='T-Statistic', y='P-value', data=transformed_gdf)
+	plt.title('t-test Results for K between Grassland and Cropland')
+	plt.xlabel('T-statistic')
+	plt.ylabel('p-value')
+	plt.show()

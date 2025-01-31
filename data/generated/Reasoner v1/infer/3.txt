@@ -1,0 +1,11 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Select the relevant columns for correlation analysis
+	selected_columns = data_gdf[['pH_CaCl2', 'pH_H2O', 'OC', 'CaCO3', 'P', 'N', 'K', 'EC']]
+	# Calculate the correlation matrix with EC as the target variable
+	correlation_matrix = selected_columns.corrwith(selected_columns['EC'])
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'Parameter': correlation_matrix.index,
+	    'Correlation Coefficient': correlation_matrix.values
+	})
+	print(transformed_gdf)

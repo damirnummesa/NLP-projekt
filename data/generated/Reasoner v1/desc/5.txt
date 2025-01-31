@@ -1,0 +1,10 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the GeoDataFrame for samples in Slovenia (NUTS_0 = 'SI')
+	slovenia_gdf = data_gdf[data_gdf['NUTS_0'] == 'SI']
+	# Calculate the max value of 'N' for the filtered GeoDataFrame
+	max_N_value = slovenia_gdf['N'].max()
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'Max N Value': [max_N_value]
+	})
+	print(transformed_gdf)

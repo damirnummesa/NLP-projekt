@@ -1,0 +1,14 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Select the required columns for correlation matrix
+	selected_columns = data_gdf[['EC', 'pH_CaCl2', 'pH_H2O', 'OC', 'CaCO3', 'P', 'N', 'K']]
+	# Calculate the correlation matrix
+	correlation_matrix = selected_columns.corr()
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame(correlation_matrix)
+	import seaborn as sns
+	import matplotlib.pyplot as plt
+	# Generate a heatmap of the correlation matrix
+	plt.figure(figsize=(10, 8))
+	sns.heatmap(transformed_gdf.corr(), annot=True, cmap='coolwarm', linewidths=0.5)
+	plt.title('Correlation Matrix Heatmap')
+	plt.show()

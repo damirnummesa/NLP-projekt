@@ -1,0 +1,11 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Create a contingency table for LC0_Desc and pH_H2O
+	contingency_table = pd.crosstab(data_gdf['LC0_Desc'], data_gdf['pH_H2O'])
+	# Perform chi-square test on the contingency table
+	chi2, p_value, dof, expected = stats.chi2_contingency(contingency_table)
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'Chi-Square': [chi2],
+	    'P-Value': [p_value]
+	})
+	print(transformed_gdf)

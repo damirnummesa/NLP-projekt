@@ -1,0 +1,28 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import necessary libraries
+	import pandas as pd
+	# Select numerical columns from the GeoDataFrame 'data_gdf'
+	numerical_cols = ['pH_CaCl2', 'pH_H2O', 'EC', 'OC', 'CaCO3', 
+	                  'P', 'N', 'K', 'OC (20-30 cm)', 'CaCO3 (20-30 cm)',
+	                  'Ox_Al', 'Ox_Fe']
+	# Create a new GeoDataFrame called 'transformed_gdf' with only the numerical columns
+	transformed_gdf = data_gdf[numerical_cols]
+	# Calculate summary statistics for all numerical columns in the dataset
+	summary_stats = transformed_gdf.describe()
+	import pandas as pd
+	import matplotlib.pyplot as plt
+	# Calculate summary statistics for all numerical columns in the dataset.
+	summary_stats = transformed_gdf.describe()
+	# Plot a histogram of each column with a density plot on top, and boxplot below it
+	fig, axs = plt.subplots(nrows=4, ncols=3, figsize=(15, 10))
+	for i in range(12):
+	    ax = axs[i // 3, i % 3]
+	    if summary_stats[summary_stats.columns[i]].dtype == 'float64':
+	        transformed_gdf.hist(column=summary_stats.columns[i], bins=20, alpha=0.5, density=True, ax=ax)
+	        # Plot a boxplot below the histogram
+	        sns.boxplot(x=transformed_gdf[summary_stats.columns[i]], ax=ax)
+	    else:
+	        print(f"Skipping {summary_stats.columns[i]} as it's not float64")
+	# Layout so plots do not overlap
+	fig.tight_layout()
+	plt.show()

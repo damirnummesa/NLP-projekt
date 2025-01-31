@@ -1,0 +1,13 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import necessary libraries
+	import pandas as pd
+	from sklearn.cluster import KMeans
+	import scipy.stats as stats
+	# Calculate the z-scores for 'EC'
+	data_gdf['z_score_EC'] = data_gdf['EC'].apply(lambda x: (x - data_gdf['EC'].mean()) / data_gdf['EC'].std())
+	# Identify outliers with z-score > 3 or < -3
+	outliers = data_gdf[(data_gdf['z_score_EC'] > 3) | (data_gdf['z_score_EC'] < -3)]
+	# Store the transformed results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = data_gdf.copy()
+	# Print the transformed data with z-scores for 'EC' and outliers identified
+	print(transformed_gdf[['POINTID', 'EC', 'z_score_EC']])

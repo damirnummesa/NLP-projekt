@@ -1,0 +1,11 @@
+{
+    "MODEL_ID": "Llama 3.2 3B Instruct",
+    "METEOR": 0.5792207792207792,
+    "ROUGE_1": 0.2537313432835821,
+    "ROUGE_2": 0.1818181818181818,
+    "ROUGE_L": 0.22388059701492535,
+    "BLEU": 0.11846592694382019,
+    "CosineSimilarity": 0.38256762779442105,
+    "ASTComparison": 0,
+    "LevenshteinDistance": 13
+}

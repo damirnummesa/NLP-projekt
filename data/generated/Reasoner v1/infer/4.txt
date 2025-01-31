@@ -1,0 +1,12 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data for Grassland and Cropland
+	grassland_data = data_gdf[data_gdf['LC0_Desc'] == 'Grassland']['K']
+	cropland_data = data_gdf[data_gdf['LC0_Desc'] == 'Cropland']['K']
+	# Perform a t-test to compare K between Grassland and Cropland
+	t_stat, p_value = stats.ttest_ind(grassland_data, cropland_data)
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'Statistic': [t_stat],
+	    'P-value': [p_value]
+	})
+	print(transformed_gdf)

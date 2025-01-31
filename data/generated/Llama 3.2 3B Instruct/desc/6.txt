@@ -1,0 +1,37 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	# Filter by Depth and NUTS_0
+	data_gdf = data_gdf[(data_gdf['Depth'] == '20_30') & (data_gdf['NUTS_0'].str.startswith('DE'))]
+	# Select numerical columns
+	numerical_cols = ['pH_CaCl2', 'pH_H2O', 'EC', 'OC', 'CaCO3', 'P', 'N', 'K',
+	                 'OC (20-30 cm)', 'CaCO3 (20-30 cm)', 'Ox_Al', 'Ox_Fe']
+	# Calculate summary statistics for numerical columns
+	summary_stats = data_gdf[numerical_cols].describe()
+	transformed_gdf = pd.DataFrame(summary_stats)
+	import seaborn as sns
+	import matplotlib.pyplot as plt
+	sns.set()
+	plt.figure(figsize=(10,6))
+	sns.boxplot(x='pH_H2O', y='EC', data=transformed_gdf)
+	plt.title('Box Plot of EC vs pH_H2O')
+	plt.xlabel('pH H2O')
+	plt.ylabel('Electrical Conductivity (EC)')
+	plt.show()
+	plt.figure(figsize=(10,6))
+	sns.boxplot(x='OC (20-30 cm)', y='CaCO3', data=transformed_gdf)
+	plt.title('Box Plot of CaCO3 vs OC (20-30 cm)')
+	plt.xlabel('Organic Carbon Content')
+	plt.ylabel('Calcium Carbonate Concentration')
+	plt.show()
+	plt.figure(figsize=(10,6))
+	sns.scatterplot(x='N', y='P', hue='pH_H2O', data=transformed_gdf)
+	plt.title('Scatter Plot of N vs P with pH_H2O Color')
+	plt.xlabel('Nitrogen (N)')
+	plt.ylabel('Phosphorus (P)')
+	plt.show()
+	plt.figure(figsize=(10,6))
+	sns.scatterplot(x='K', y='EC', hue='pH_H2O', data=transformed_gdf)
+	plt.title('Scatter Plot of K vs EC with pH_H2O Color')
+	plt.xlabel('Potassium (K)')
+	plt.ylabel('Electrical Conductivity (EC)')
+	plt.show()

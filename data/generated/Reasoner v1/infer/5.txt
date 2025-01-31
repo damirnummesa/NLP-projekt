@@ -1,0 +1,22 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the data for pH_H2O and K, dropping rows with NaN values
+	filtered_data = data_gdf[['pH_H2O', 'K']].dropna()
+	# Perform linear regression analysis
+	from sklearn.linear_model import LinearRegression
+	X = filtered_data['pH_H2O'].values.reshape(-1, 1)
+	y = filtered_data['K']
+	model = LinearRegression()
+	model.fit(X, y)
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({
+	    'slope': [model.coef_[0]],
+	    'intercept': [model.intercept_]
+	})
+	import matplotlib.pyplot as plt
+	# Plot the linear regression analysis results
+	plt.figure(figsize=(10, 6))
+	sns.lineplot(data=transformed_gdf, x='slope', y='intercept')
+	plt.title('Linear Regression Analysis of pH_H2O vs K')
+	plt.xlabel('Slope')
+	plt.ylabel('Intercept')
+	plt.show()

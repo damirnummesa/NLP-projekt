@@ -1,0 +1,16 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Filter the GeoDataFrame to include only rows where 'K' is not missing and greater than 0
+	transformed_gdf = data_gdf[data_gdf['K'] > 0]
+	# Select columns of interest for plotting (assuming you want to plot K)
+	selected_cols = ['geometry', 'Depth', 'K']
+	# Create a new GeoDataFrame with the selected columns
+	transformed_gdf = transformed_gdf[selected_cols]
+	import matplotlib.pyplot as plt
+	# Plot the distribution of 'K' with a KDE overlay
+	plt.figure(figsize=(10, 8))
+	sns.kdeplot(data=transformed_gdf['K'], shade=True)
+	plt.title('Distribution of K')
+	plt.xlabel('K (m)')
+	plt.ylabel('Density')
+	# Save plot to file as PNG
+	plt.savefig('k_distribution.png', bbox_inches='tight')

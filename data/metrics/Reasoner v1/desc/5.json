@@ -1,0 +1,11 @@
+{
+    "MODEL_ID": "Reasoner v1",
+    "METEOR": 0.4863418516825011,
+    "ROUGE_1": 0.46153846153846156,
+    "ROUGE_2": 0.23684210526315788,
+    "ROUGE_L": 0.41025641025641024,
+    "BLEU": 0.02310128340501537,
+    "CosineSimilarity": 0.24498947175305577,
+    "ASTComparison": 0,
+    "LevenshteinDistance": 9
+}

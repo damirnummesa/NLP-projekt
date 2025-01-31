@@ -1,0 +1,21 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	# Filter data for Austria
+	austria_gdf = data_gdf[data_gdf['NUTS_0'] == 'AT']
+	# Calculate average pH values for Austria
+	average_pH_Austria = austria_gdf[['pH_CaCl2', 'pH_H2O']].mean(axis=1)
+	# Create new GeoDataFrame with the calculated averages
+	transformed_gdf = pd.DataFrame({'Average_PH': average_pH_Austria})
+	import matplotlib.pyplot as plt
+	# Create a new figure and axis object
+	fig, ax = plt.subplots(figsize=(10, 6))
+	# Plot the map of Europe with black borders and light gray fill color
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Set the extent to match the bounds of europe_gdf for proper visualization
+	ax.set_xlim(europe_gdf.total_bounds[0])
+	ax.set_ylim(europe_gdf.total_bounds[1])
+	# Plot the average pH locations from 'transformed_gdf' on top of the map
+	transformed_gdf.plot(ax=ax, column='Average_PH', cmap='coolwarm',
+	                    legend=True, marker='o', markersize=5,
+	                    color='blue')
+	plt.show()

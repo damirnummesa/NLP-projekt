@@ -1,0 +1,45 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	# Filter data for Austria and France based on NUTS codes
+	austria_data = data_gdf[(data_gdf['NUTS_0'] == 'AT') & (data_gdf['NUTS_1'].str.startswith('A'))]
+	france_data = data_gdf[data_gdf['NUTS_0'] == 'FR']
+	# Perform ANOVA on Austria and France
+	austria_anova = stats.f_oneway(austria_data['N'], austria_data['pH_CaCl2'])
+	france_anova = stats.f_oneway(france_data['N'], france_data['pH_CaCl2'])
+	# Create DataFrames for the ANOVA results
+	austria_results = pd.DataFrame({
+	    'Country': ['Austria'] * len(austria_data),
+	    'Mean_N': austria_data['N'].mean(),
+	    'F-statistic': austria_anova.statistic,
+	    'p-value': austria_anova.pvalue
+	})
+	france_results = pd.DataFrame({
+	    'Country': ['France'] * len(france_data),
+	    'Mean_N': france_data['N'].mean(),
+	    'F-statistic': france_anova.statistic,
+	    'p-value': france_anova.pvalue
+	})
+	# Concatenate the results into a single DataFrame
+	results_df = pd.concat([austria_results, france_results])
+	# Filter out countries with p-values greater than 0.05 (significant difference)
+	filtered_results = results_df[results_df['p-value'] <= 0.05]
+	transformed_gdf = data_gdf[(data_gdf['NUTS_0'].isin(filtered_results['Country'])) & 
+	                            ((data_gdf['NUTS_1'].str.startswith('A')) | (data_gdf['NUTS_0'] == 'FR'))]
+	import geopandas as gpd
+	# Create a new figure and axis object
+	fig, ax = plt.subplots(figsize=(10, 6))
+	# Plot the map of Europe with black borders and light gray fill color
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Overlay data from 'transformed_gdf' on top of the European map,
+	# using a custom colormap to differentiate between Austria (blue) and France (red)
+	for index, row in transformed_gdf.iterrows():
+	    if row['NUTS_0'] == 'AT':
+	        ax.scatter(row.geometry.x, row.geometry.y, c='b', s=10, label='Austria')
+	    elif row['NUTS_1'] == 'FR':
+	        ax.scatter(row.geometry.x, row.geometry.y, c='r', s=10, label='France')
+	# Set title for the plot
+	ax.set_title('Nitrogen (N) in Austria and France')
+	# Add a legend to distinguish between Austria and France
+	ax.legend()
+	# Show the plot
+	plt.show()

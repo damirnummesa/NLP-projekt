@@ -1,0 +1,16 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	import pandas as pd
+	# Filter by land type (LC0_Desc)
+	data_gdf = data_gdf[data_gdf['LC0_Desc'].isin(['Forest', 'Grassland', 'Wetlands'])]
+	# Group by LC0_Desc and calculate average OC
+	grouped_oc_avg = data_gdf.groupby('LC0_Desc')['OC'].mean().reset_index()
+	# Rename the column to 'Average_OC'
+	transformed_gdf = grouped_oc_avg.rename(columns={'OC': 'Average_OC'})
+	print(transformed_gdf)
+	import matplotlib.pyplot as plt
+	plt.figure(figsize=(10,6))
+	sns.barplot(x='LC0_Desc', y='Average_OC', data=transformed_gdf)
+	plt.title('Average OC by Land Type')
+	plt.xlabel('Land Type')
+	plt.ylabel('Average OC')
+	plt.savefig('average_oc_by_land_type.png')

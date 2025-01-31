@@ -1,0 +1,11 @@
+{
+    "MODEL_ID": "Llama 3.1 8B Instruct 128k",
+    "METEOR": 0.22035192029567732,
+    "ROUGE_1": 0.10843373493975902,
+    "ROUGE_2": 0.036585365853658534,
+    "ROUGE_L": 0.10843373493975902,
+    "BLEU": 0.030057917460318388,
+    "CosineSimilarity": 0.1660283530593413,
+    "ASTComparison": 0,
+    "LevenshteinDistance": 13
+}
