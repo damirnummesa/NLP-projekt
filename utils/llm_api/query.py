@@ -218,7 +218,7 @@ class QueryProvider():
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
     Focus solely on generating a map-based visualization by overlaying data from 'transformed_gdf' on a map of Europe.
-    Locations plot as markers with size 5 if not specified otherwise.
+    Locations plot as markers with markersize 1 if not specified otherwise.
     The map of Europe is already loaded in europe_gdf. europe_gdf can be set as the base of the map using the following line:
     '''python europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')'''
     
@@ -252,7 +252,7 @@ class QueryProvider():
     Instructions:
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
-    Locations plot as markers with size 5 if not specified otherwise.
+    Locations plot as markers with markersize 1 if not specified otherwise.
     Focus solely on generating a map-based visualization by overlaying data from 'transformed_gdf' on a map of Europe.
     The map of Europe is already loaded in europe_gdf. europe_gdf can be set as the base using the following line:
     '''python europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')'''
