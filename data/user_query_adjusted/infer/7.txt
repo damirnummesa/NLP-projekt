@@ -1,0 +1,1 @@
+Can you simulate the sampling distribution of the average pH in water (pH_H2O) using sample sizes of 30, and compare it to a normal distribution with a plot?

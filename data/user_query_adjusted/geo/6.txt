@@ -1,0 +1,1 @@
+Can you create a map showing soil pH_CaCl2 levels across Europe? I'd like the dots to be colored by pH_CaCl2 values, and save it as an image.

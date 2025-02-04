@@ -26,12 +26,14 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 def run_pipeline(objective: str, 
-                 client_instructor: Union[HuggingFaceLLMClient, GPT4AllClient], 
+                 client_instructor: Union[HuggingFaceLLMClient, GPT4AllClient],
+                 client_corrector: Union[HuggingFaceLLMClient, GPT4AllClient], 
                  client_coder: Union[HuggingFaceLLMClient, GPT4AllClient], 
                  data_gdf: gpd.GeoDataFrame,
                  data_gdf_description: str,
                  europe_gdf: gpd.GeoDataFrame,
                  europe_gdf_description: str,
+                 categorical_columns_values: str,
                  retry_count: int) -> str:
     
     # Transform part
@@ -43,8 +45,12 @@ def run_pipeline(objective: str,
                                                   objective=objective, 
                                                   data_gdf_description=data_gdf_description,
                                                   error=error,
-                                                  error_code=error_code)
-        response = client_instructor.query(transform_query)
+                                                  error_code=error_code,
+                                                  categorical_columns_values=categorical_columns_values)
+        if error is None:
+            response = client_instructor.query(transform_query)
+        else:
+            response = client_corrector.query(transform_query)
         logging.log(logging.INFO, f"Query finished successfully, response: \n{response}")
         transform_code = None
         try:
@@ -85,7 +91,10 @@ def run_pipeline(objective: str,
                                                   intermediate_data_description=intermediate_data_description,
                                                   error=error,
                                                   error_code=error_code)
-        response = client_coder.query(visualize_query)
+        if error is None:
+            response = client_coder.query(visualize_query)
+        else:
+            response = client_corrector.query(visualize_query)
         logging.log(logging.INFO, f"Query finished successfully, response: \n{response}")
         visualize_code = None
         try:

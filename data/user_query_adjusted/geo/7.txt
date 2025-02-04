@@ -1,0 +1,1 @@
+Can you show me a map of Europe marking only the locations with the highest potassium ('K') levels? Just highlight the top 10% of spots and save it as an image.

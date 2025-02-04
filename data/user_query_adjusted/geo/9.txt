@@ -1,0 +1,1 @@
+Can you create a colorful map showing different types of soil by 'LC0_Desc' across Europe? I'd like each soil type marked in a different color and saved as an image.

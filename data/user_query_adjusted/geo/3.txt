@@ -1,0 +1,1 @@
+Plot all the points where LC0_Desc=Woodland and pH<6 on the map, and save the result as a png.

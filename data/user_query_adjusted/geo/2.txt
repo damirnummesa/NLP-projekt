@@ -1,0 +1,1 @@
+Can you plot the locations where LC0_Desc=Woodland on the map, and save the it as a PNG file?

@@ -1,0 +1,1 @@
+Can you create a heatmap that shows how the following soil properties are related to each other: EC, pH_CaCl2, pH_H2O, OC, CaCO3, P, N, and K?

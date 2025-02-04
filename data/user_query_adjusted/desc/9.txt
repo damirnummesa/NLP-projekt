@@ -1,0 +1,1 @@
+Find the average potassium 'K' where electrical conductivity 'EC' is greater than 10.

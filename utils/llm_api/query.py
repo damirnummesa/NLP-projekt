@@ -41,9 +41,13 @@ class QueryProvider():
     %s
     
     Data Context:
-    The input GeoDataFrame has the following columns:
+    The 'data_gdf' GeoDataFrame has the following columns:
     %s
 
+    Categorical Column Values:
+    The categorical columns of 'data_gdf' GeoDataFrame can have following values by columns:
+    %s
+    
     Available Python Packages:
     You have access to the following Python packages for data transformations and analysis:
 
@@ -214,6 +218,7 @@ class QueryProvider():
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
     Focus solely on generating a map-based visualization by overlaying data from 'transformed_gdf' on a map of Europe.
+    Locations plot as markers with size 5 if not specified otherwise.
     The map of Europe is already loaded in europe_gdf. europe_gdf can be set as the base of the map using the following line:
     '''python europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')'''
     
@@ -247,6 +252,7 @@ class QueryProvider():
     Instructions:
     Ignore any transformation instructions.
     Do not perform any filtering or additional transformations.
+    Locations plot as markers with size 5 if not specified otherwise.
     Focus solely on generating a map-based visualization by overlaying data from 'transformed_gdf' on a map of Europe.
     The map of Europe is already loaded in europe_gdf. europe_gdf can be set as the base using the following line:
     '''python europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')'''
@@ -266,14 +272,16 @@ class QueryProvider():
                   europe_gdf_description: str = None, 
                   intermediate_data_description: str = None, 
                   error: str = None,
-                  error_code: str = None) -> str:
+                  error_code: str = None,
+                  categorical_columns_values: str = None) -> str:
         assert query_type in QueryType
         assert objective is not None
         if query_type in [QueryType.TYPE]:
             return QueryProvider.prompt_queries[query_type] % (objective)
         elif query_type in [QueryType.TRANSFORM]:
             assert data_gdf_description is not None
-            return QueryProvider.prompt_queries[query_type] % (objective, data_gdf_description)
+            assert categorical_columns_values is not None
+            return QueryProvider.prompt_queries[query_type] % (objective, data_gdf_description, categorical_columns_values)
         elif query_type in [QueryType.TRANSFORM_ERROR]:
             assert data_gdf_description is not None
             assert error is not None

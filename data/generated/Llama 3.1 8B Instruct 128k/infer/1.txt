@@ -1,0 +1,78 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import necessary libraries
+	import pandas as pd
+	# Create a copy of the original GeoDataFrame to avoid modifying it directly
+	transformed_gdf = data_gdf.copy()
+	# Filter for unique LC0_Desc values and store in 'unique_lc0_desc'
+	unique_lc0_desc = transformed_gdf['LC0_Desc'].unique()
+	print(unique_lc0_desc)
+	# Apply filtering conditions sequentially
+	for lc0_desc in unique_lc0_desc:
+	    # Select rows where the type of land is equal to current LC0_Desc value
+	    filtered_gdf = data_gdf[data_gdf['LC0_Desc'] == lc0_desc]
+	    # Check if 'pH_H2O' varies depending on the type of land (LC0_Desc)
+	    print(f"Does pH vary for {lc0_desc}?")
+	    print(filtered_gdf.groupby('Depth')['pH_H2O'].nunique().reset_index())
+	import pandas as pd
+	import matplotlib.pyplot as plt
+	# Group the data by LC0_Desc and calculate mean pH_H2O for each group
+	mean_pH_by_LC0 = transformed_gdf.groupby('LC0_Desc')['pH_H2O'].mean().reset_index()
+	# Plot a bar chart of mean pH_H2O vs LC0_Desc
+	plt.figure(figsize=(10, 6))
+	sns.barplot(x='LC0_Desc', y='pH_H2O', data=mean_pH_by_LC0)
+	plt.title('Mean pH_H2O by Land Type (LC0_Desc)')
+	plt.xlabel('Land Type')
+	plt.ylabel('Average pH_H2O Value')
+	plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
+	plt.tight_layout()
+	plt.show()
+	# Plot a box plot of pH_H2O vs LC0_Desc to visualize the distribution and outliers
+	plt.figure(figsize=(10, 6))
+	sns.boxplot(x='LC0_Desc', y='pH_H2O', data=mean_pH_by_LC0)
+	plt.title('Distribution of pH_H2O by Land Type (LC0_Desc)')
+	plt.xlabel('Land Type')
+	plt.ylabel('pH_H2O Value')
+	plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
+	plt.tight_layout()
+	plt.show()
+	# Plot a violin plot to visualize the distribution and density of pH_H2O values across different land types (LC0_Desc)
+	plt.figure(figsize=(10, 6))
+	sns.violinplot(x='LC0_Desc', y='pH_H2O', data=mean_pH_by_LC0)
+	plt.title('Distribution and Density of pH_H2O by Land Type (LC0_Desc)')
+	plt.xlabel('Land Type')
+	plt.ylabel('pH_H2O Value')
+	plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
+	plt.tight_layout()
+	plt.show()
+	# Plot a scatter plot to visualize the relationship between LC0_Desc and pH_H2O values
+	plt.figure(figsize=(10, 6))
+	sns.scatterplot(x='LC0_Desc', y='pH_H2O', data=mean_pH_by_LC0)
+	plt.title('Relationship Between Land Type (LC0_Desc) and pH_H2O')
+	plt.xlabel('Land Type')
+	plt.ylabel('Average pH_H2O Value')
+	plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
+	plt.tight_layout()
+	plt.show()
+	# Plot a histogram to visualize the distribution of pH_H2O values across different land types (LC0_Desc)
+	plt.figure(figsize=(10, 6))
+	sns.histplot(x='pH_H2O', hue='LC0_Desc', data=mean_pH_by_LC0, bins=20)
+	plt.title('Distribution of pH_H2O Values by Land Type (LC0_Desc)')
+	plt.xlabel('pH_H2O Value')
+	plt.ylabel('Frequency')
+	plt.legend(title='Land Type')  # Add a legend to distinguish between land types
+	plt.tight_layout()
+	plt.show()
+	# Plot a box plot with jittered points for LC0_Desc and pH_H2O values
+	plt.figure(figsize=(10, 6))
+	sns.boxplot(x='LC0_Desc', y='pH_H2O', data=mean_pH_by_LC0)
+	sns.stripplot(x='LC0_Desc', y='pH_H2O', jitter=True, hue='LC0_Desc', data=mean_pH_by_LC0)
+	plt.title('Box Plot with Jittered Points of pH_H2O by Land Type (LC0_Desc)')
+	plt.xlabel('Land Type')
+	plt.ylabel('Average pH_H2O Value')
+	plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
+	plt.tight_layout()
+	plt.show()
+	# Save the plots to a file
+	for i in range(1, len(mean_pH_by_LC0)):
+	    plt.savefig(f'plot_{i}.png')
+	print('Plots saved successfully!')

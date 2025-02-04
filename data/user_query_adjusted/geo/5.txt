@@ -1,0 +1,1 @@
+Can you create a map showing locations where potassium (K) levels are above the median, and save the map as a PNG file?

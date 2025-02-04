@@ -1,0 +1,1 @@
+Can you create a bar chart showing the average organic carbon (OC) for each type of land (LC0_Desc) and save it as a PNG file?

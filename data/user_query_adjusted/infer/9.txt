@@ -1,0 +1,1 @@
+Can you test whether the average potassium (K) content in the dataset is significantly different from 2% using a t-test?

@@ -1,28 +1,15 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	# Import necessary libraries and create a copy of the original GeoDataFrame to avoid modifying it directly
-	import geopandas as gpd
-	transformed_gdf = data_gdf.copy()
-	# Filter for locations where 'K' is above its median value in Europe
-	median_K = transformed_gdf['K'].median()
-	filtered_gdf = transformed_gdf[transformed_gdf['K'] > median_K]
-	# Select only the required columns from the filtered GeoDataFrame
-	required_columns = ['geometry', 'POINTID', 'pH_CaCl2', 'pH_H2O', 'EC', 
-	                   'OC', 'CaCO3', 'P', 'N', 'K']
-	transformed_gdf = filtered_gdf[required_columns]
-	# Save the transformed GeoDataFrame to a new file
-	transformed_gdf.to_file('k_above_median.shp')
+	import pandas as pd
+	transformed_gdf = data_gdf[data_gdf['K'] > data_gdf['K'].median()]
+	transformed_gdf['SURVEY_DATE'] = transformed_gdf['SURVEY_DATE'].astype('object')
+	transformed_gdf.to_file('k_above_median.shp', driver='ESRI Shapefile')
 	import matplotlib.pyplot as plt
-	# Get the median of K values from transformed_gdf
-	median_K = transformed_gdf['K'].median()
-	# Filter points where K is above its median value
-	filtered_points = transformed_gdf[transformed_gdf['K'] > median_K]
-	# Create a figure and axis object for plotting
 	fig, ax = plt.subplots(figsize=(10, 8))
-	# Set the base map with europe_gdf
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	# Plot markers at locations where K is above its median value
-	filtered_points['geometry'].plot(color='red', marker='o', ax=ax)
-	# Add a title to the plot
-	ax.set_title('Locations with Potassium (K) Above Median Value in Europe')
-	# Save the plot as a PNG file
-	plt.savefig('k_above_median_europe.png')
+	above_median_k = transformed_gdf[transformed_gdf['K'] > transformed_gdf['K'].median()]
+	above_median_k.plot(ax=ax, column='K', markersize=5)
+	ax.set_title('Locations where potassium (K) levels are above the median')
+	ax.set_xlabel('Longitude')
+	ax.set_ylabel('Latitude')
+	plt.savefig('potassium_above_median.png')
+	plt.show()

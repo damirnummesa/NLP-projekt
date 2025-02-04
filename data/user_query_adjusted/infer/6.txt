@@ -1,0 +1,1 @@
+Can you calculate a 95% confidence interval for the average organic carbon (OC) content in the dataset?

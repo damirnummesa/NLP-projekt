@@ -1,0 +1,1 @@
+Can you use KMeans clustering to group geographic points based on latitude and longitude into three clusters, plot them on a map, and save the result as a PNG file?

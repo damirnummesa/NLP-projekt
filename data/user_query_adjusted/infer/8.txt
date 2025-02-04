@@ -1,0 +1,1 @@
+Can you find any outliers in the electrical conductivity (EC) values by calculating z-scores and identifying those beyond ±3?

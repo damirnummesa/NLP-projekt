@@ -1,0 +1,1 @@
+Could you make a map showing where soil pH_H2O levels in Europe are acidic versus basic? Mark acidic spots in red and basic spots in blue, and save it as an image.

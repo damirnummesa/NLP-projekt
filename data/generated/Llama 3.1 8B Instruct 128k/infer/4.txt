@@ -1,19 +1,38 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	# Filter the data to include only Grassland and Cropland samples
-	grass_cropland_gdf = data_gdf[data_gdf['LU'] == 'Grassland or cropland']
-	# Select columns of interest for t-test
-	t_test_data = grass_cropland_gdf[['K', 'LC0_Desc']]
-	# Perform a two-sample independent t-test to compare K between Grassland and Cropland
-	from scipy.stats import ttest_ind
-	grass_k_values = [row['K'] for index, row in data_gdf[data_gdf['LU'] == 'Grassland'].iterrows()]
-	cropland_k_values = [row['K'] for index, row in data_gdf[data_gdf['LU'] == 'Cropland'].iterrows()]
-	t_statistic, p_value = ttest_ind(grass_k_values, cropland_k_values)
-	# Create a new GeoDataFrame with the results
-	transformed_gdf = pd.DataFrame({'T-Statistic': [t_statistic], 'P-value': [p_value]})
+	# Import necessary libraries
+	import pandas as pd
+	# Filter the data to include only grasslands and croplands
+	grassland_data = data_gdf[data_gdf['LC0_Desc'] == 'Grassland']
+	cropland_data = data_gdf[data_gdf['LU1_Desc'] == 'Cropland']
+	# Create a new GeoDataFrame for each land cover type
+	transformed_grassland_gdf = grassland_data.copy()
+	transformed_cropland_gdf = cropland_data.copy()
+	# Filter the transformed GeoDataFrames to include only rows where K is not missing and Depth is 0-20 cm or 10-30 cm (to match with OC, CaCO3)
+	transformed_grassland_gdf = transformed_grassland_gdf[(~transformed_grassland_gdf['K'].isnull()) & ((transformed_grassland_gdf['Depth'] == '0_10') | (transformed_grassland_gdf['Depth'] == '20_30'))]
+	transformed_cropland_gdf = transformed_cropland_gdf[(~transformed_cropland_gdf['K'].isnull()) & ((transformed_cropland_gdf['Depth'] == '0_10') | (transformed_cropland_gdf['Depth'] == '20_30'))]
+	# Filter the transformed GeoDataFrames to include only rows where K is not missing
+	transformed_grassland_gdf = transformed_grassland_gdf[~transformed_grassland_gdf['K'].isnull()]
+	transformed_cropland_gdf = transformed_cropland_gdf[~transformed_cropland_gdf['K'].isnull()]
+	# Calculate the mean K levels for grasslands and croplands
+	mean_k_grassland = transformed_grassland_gdf['K'].mean()
+	mean_k_cropland = transformed_cropland_gdf['K'].mean()
+	# Store the results in a new GeoDataFrame called 'transformed_gdf'
+	transformed_gdf = pd.DataFrame({'Mean K Grasslands': [mean_k_grassland], 'Mean K Croplands': [mean_k_cropland]})
+	import pandas as pd
 	import matplotlib.pyplot as plt
-	plt.figure(figsize=(8,6))
-	sns.barplot(x='T-Statistic', y='P-value', data=transformed_gdf)
-	plt.title('t-test Results for K between Grassland and Cropland')
-	plt.xlabel('T-statistic')
-	plt.ylabel('p-value')
+	# Assuming 'transformed_gdf' is a GeoDataFrame with the structure:
+	# <class 'pandas.core.frame.DataFrame'>
+	# RangeIndex: 1 entries, 0 to 0
+	# Data columns (total 2 columns):
+	# #   Column             Non-Null Count  Dtype  
+	# ---  ------             --------------  -----  
+	# 0   Mean K Grasslands  0 non-null      float64
+	# 1   Mean K Croplands   0 non-null      float64
+	transformed_gdf.plot(kind='bar', x='Mean K Grasslands', y='Mean K Croplands')
+	plt.title('Difference in Potassium Levels Between Grasslands and Croplands')
+	plt.xlabel('Grassland Average Potassium Level (K)')
+	plt.ylabel('Cropland Average Potassium Level (K)')
+	# Add a horizontal line at zero to highlight the difference
+	v = plt.axhline(y=0, color='r', linestyle='--')
+	plt.legend([v], ['Zero Difference'])
 	plt.show()
