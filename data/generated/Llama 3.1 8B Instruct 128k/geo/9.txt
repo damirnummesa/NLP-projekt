@@ -1,0 +1,24 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	# Import necessary libraries and create a copy of the original GeoDataFrame to avoid modifying it directly
+	import pandas as pd
+	transformed_gdf = data_gdf.copy()
+	# Filter for LC0_Desc column values that are not 'Water'
+	transformed_gdf = transformed_gdf[~transformed_gdf['LC0_Desc'].isin(['Water'])]
+	# Group by LC0_Desc and create a new GeoDataFrame with unique colors for each soil type
+	unique_soil_types = transformed_gdf.groupby('LC0_Desc')['geometry']
+	colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'pink']
+	transformed_gdf = pd.concat([pd.DataFrame({'color': [c] * len(unique_soil_types.get_group(soil_type)), 
+	                                            'geometry': unique_soil_types.get_group(soil_type)}) for soil_type, c in zip(unique_soil_types.groups.keys(), colors)], ignore_index=True)
+	import matplotlib.pyplot as plt
+	# Create a figure and axis object to plot the map of Europe with 'transformed_gdf' data overlayed on it.
+	fig, ax = plt.subplots(figsize=(10, 8))
+	# Plot the base map of Europe using europe_gdf
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Overlay the transformed data from 'transformed_gdf'
+	# Since we have a column named 'color' in our GeoDataFrame which contains different colors for each soil type,
+	# We will use this to style the markers on the map.
+	for i, row in transformed_gdf.iterrows():
+	    ax.plot(row.geometry.x, row.geometry.y, marker='o', color=row.color, markersize=1)
+	# Set a title for the plot and show it.
+	plt.title('Soil Types in Europe')
+	plt.show()

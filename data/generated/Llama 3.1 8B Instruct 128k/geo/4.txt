@@ -1,20 +1,11 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	import pandas as pd
 	from sklearn.cluster import KMeans
-	transformed_gdf = data_gdf[['geometry', 'TH_LAT', 'TH_LONG']]
-	kmeans_model = KMeans(n_clusters=3)
-	kmeans_model.fit(transformed_gdf[['TH_LAT', 'TH_LONG']].values)
-	transformed_gdf['cluster'] = kmeans_model.predict(transformed_gdf[['TH_LAT', 'TH_LONG']])
-	import matplotlib.pyplot as plt
+	transformed_gdf = data_gdf.copy()
+	kmeans = KMeans(n_clusters=3)
+	kmeans.fit(data_gdf[['TH_LAT', 'TH_LONG']])
+	data_gdf['cluster'] = kmeans.predict(data_gdf[['TH_LAT', 'TH_LONG']])
 	fig, ax = plt.subplots(figsize=(10, 8))
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	from sklearn.cluster import KMeans
-	kmeans = KMeans(n_clusters=3)
-	transformed_gdf['cluster'] = kmeans.fit_predict(transformed_gdf[['TH_LAT', 'TH_LONG']].values)
-	for i in range(1, 4):
-	    filtered_df = transformed_gdf[transformed_gdf['cluster'] == i]
-	    ax.scatter(filtered_df.geometry.x, filtered_df.geometry.y, s=5, label=f'Cluster {i}')
-	ax.set_title('KMeans Clustering in Europe')
-	ax.legend()
-	plt.savefig('kmeans_europe.png', bbox_inches='tight')
-	plt.show()
+	transformed_gdf['cluster'] = KMeans(n_clusters=3).fit_predict(transformed_gdf[['TH_LAT', 'TH_LONG']])
+	ax.scatter(transformed_gdf['TH_LAT'], transformed_gdf['TH_LONG'], c=transformed_gdf['cluster'])
+	plt.savefig('kmeans_map.png')

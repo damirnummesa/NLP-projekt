@@ -1,16 +1,13 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	transformed_gdf = data_gdf[data_gdf['pH_CaCl2'] > 6]
-	from geopandas import GeoDataFrame, GeoSeries
-	import matplotlib.pyplot as plt
-	transformed_gdf.plot(column='POINTID', legend=True)
-	plt.savefig('pH_CaCl2_greater_than_6.png')
-	import matplotlib.pyplot as plt
+	transformed_gdf = data_gdf.copy()
+	# Filter points where pH_CaCl2 is greater than 6
+	filtered_points = transformed_gdf[transformed_gdf['pH_CaCl2'] > 6]
+	# Save the filtered GeoDataFrame to a new variable for plotting later if needed
+	plotting_data = filtered_points
+	# Store the result in 'transformed_gdf'
+	transformed_gdf = filtered_points.copy()
 	fig, ax = plt.subplots(figsize=(10, 8))
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	filtered_data = transformed_gdf[transformed_gdf['pH_CaCl2'] > 6]
-	filtered_data.plot(ax=ax, column='geometry', color='red', marker='o', markersize=5)
-	ax.set_title('Locations where pH_CaCl2 is greater than 6')
-	ax.set_xlabel('Longitude')
-	ax.set_ylabel('Latitude')
-	plt.savefig('pH_CaCl2_greater_than_6.png', bbox_inches='tight')
-	plt.show()
+	transformed_gdf.plot(ax=ax, column=None, markersize=1)
+	ax.set_title('Locations of points where pH_CaCl2 > 6 on a map')
+	plt.savefig('pH_map.png')

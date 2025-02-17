@@ -1,0 +1,8 @@
+def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
+	transformed_gdf = data_gdf.copy()
+	data_gdf['pH_H2O_category'] = pd.cut(data_gdf['pH_H2O'], bins=[0, 7, 14], labels=['acidic', 'basic'])
+	fig, ax = plt.subplots(figsize=(10, 8))
+	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	transformed_gdf['pH_H2O_category'] = transformed_gdf['pH_H2O'].apply(lambda x: 'acidic' if x < 7 else 'basic')
+	transformed_gdf.plot(ax=ax, column='pH_H2O_category', legend=True, markersize=1)
+	plt.savefig('ph_map.png')

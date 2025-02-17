@@ -1,14 +1,24 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	filtered_gdf = data_gdf[(data_gdf['LC0_Desc'] == 'Grassland') | (data_gdf['LC0_Desc'] == 'Woodland')]
-	transformed_gdf = filtered_gdf[filtered_gdf['OC'] > 20]
+	# Filter the data for LC0_Desc='Grassland' and LC0_Desc='Woodland'
+	grassland_woodland_gdf = data_gdf[(data_gdf['LC0_Desc'] == 'Grassland') | (data_gdf['LC0_Desc'] == 'Woodland')]
+	# Filter grassland_woodland_gdf for OC > 20
+	filtered_data = grassland_woodland_gdf[grassland_woodland_gdf['OC'] > 20]
+	transformed_gdf = filtered_data.copy()
 	import matplotlib.pyplot as plt
+	# Create a figure and axis object for plotting
 	fig, ax = plt.subplots(figsize=(10, 8))
+	# Set the base map using europe_gdf
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
+	# Filter data from transformed_gdf based on LC0_Desc and OC conditions
 	filtered_data = transformed_gdf[(transformed_gdf['LC0_Desc'] == 'Grassland') | (transformed_gdf['LC0_Desc'] == 'Woodland')]
-	filtered_data_filtered_OC = filtered_data[filtered_data['OC'] > 20]
-	filtered_data_filtered_OC.plot(ax=ax, column='geometry', color='red', marker='o', markersize=5)
-	ax.set_title('Grassland & Woodland with OC>20')
+	filtered_data = filtered_data[filtered_data['OC'] > 20]
+	# Plot the filtered data on top of the map as markers
+	filtered_data.plot(ax=ax, column='LC0_Desc', legend=True, markersize=10)
+	# Set title and labels for better visualization
+	ax.set_title('Grassland and Woodland with OC>20')
 	ax.set_xlabel('Longitude')
 	ax.set_ylabel('Latitude')
-	plt.savefig('grassland_woodland_OC.png')
+	# Save the plot to a file as specified in the query context
+	plt.savefig('grassland_woodland_oc_map.png', dpi=300)
+	# Show the plot for verification purposes (optional)
 	plt.show()

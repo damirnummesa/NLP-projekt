@@ -1,10 +1,8 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	woodland_gdf = data_gdf[data_gdf['LC0_Desc'] == 'Woodland']
-	transformed_gdf = woodland_gdf.copy()
-	import matplotlib.pyplot as plt
+	transformed_gdf = data_gdf.copy()
+	filtered_data = transformed_gdf[transformed_gdf['LC0_Desc'] == 'Woodland']
 	fig, ax = plt.subplots(figsize=(10, 8))
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	transformed_gdf.loc[transformed_gdf['LC0_Desc'] == 'Woodland'].plot(ax=ax, markersize=5)
-	ax.set_title('Locations with Woodland')
-	plt.show()
-	fig.savefig('woodlands.png')
+	transformed_gdf[transformed_gdf['LC0_Desc'] == 'Woodland'].plot(ax=ax)
+	ax.set_title('Locations of Woodland on a map')
+	plt.savefig('woodland_map.png')

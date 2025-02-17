@@ -1,16 +1,7 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	transformed_gdf = data_gdf[data_gdf['pH_CaCl2'].notnull()]
-	import matplotlib.pyplot as plt
-	plt.scatter(transformed_gdf.geometry.x, transformed_gdf.geometry.y, c=transformed_gdf.pH_CaCl2)
-	plt.title('Soil pH Levels Across Europe')
-	plt.xlabel('Longitude')
-	plt.ylabel('Latitude')
-	plt.savefig('soil_pH_levels_europe.png', bbox_inches='tight')
-	import matplotlib.pyplot as plt
+	transformed_gdf = data_gdf.copy()
+	data_gdf['pH_CaCl2_color'] = pd.cut(data_gdf['pH_CaCl2'], bins=5, labels=['low', 'medium_low', 'median', 'medium_high', 'high'])
 	fig, ax = plt.subplots(figsize=(10, 8))
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	ax.scatter(transformed_gdf.geometry.x, transformed_gdf.geometry.y, s=5, c=transformed_gdf['pH_CaCl2'], cmap='coolwarm', alpha=0.7)
-	plt.title('Soil pH_CaCl2 levels across Europe')
-	ax.set_xlabel('Longitude (°)')
-	ax.set_ylabel('Latitude (°)')
-	plt.savefig('soil_pH_map.png', bbox_inches='tight')
+	transformed_gdf.plot(ax=ax, column='pH_CaCl2', legend=True)
+	plt.savefig('ph_map.png')

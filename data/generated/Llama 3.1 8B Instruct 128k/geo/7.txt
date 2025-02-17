@@ -1,7 +1,7 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
 	transformed_gdf = data_gdf.copy()
-	data_gdf['K_above_median'] = (data_gdf['K'] > stats.scoreatpercentile(data_gdf['K'], 50))
+	data_gdf['K_above_median'] = (data_gdf['K'] > stats.scoreatpercentile(data_gdf['K'], 90))
 	fig, ax = plt.subplots(figsize=(10, 8))
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
 	transformed_gdf[transformed_gdf['K_above_median'] == True].plot(ax=ax, marker='o', markersize=1)
-	plt.savefig('k_potassium_map.png')
+	plt.savefig('high_potassium_map.png')

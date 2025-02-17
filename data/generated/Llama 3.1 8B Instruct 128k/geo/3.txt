@@ -1,11 +1,8 @@
 def solve(data_gdf: gpd.GeoDataFrame, europe_gdf: gpd.GeoDataFrame):
-	transformed_gdf = data_gdf[(data_gdf['LC0_Desc'] == 'Woodland') & (data_gdf['pH_H2O'] < 6)]
-	import matplotlib.pyplot as plt
+	transformed_gdf = data_gdf.copy()
+	filtered_data = transformed_gdf[(transformed_gdf['LC0_Desc'] == 'Woodland') & (transformed_gdf['pH_CaCl2'] < 6)]
 	fig, ax = plt.subplots(figsize=(10, 8))
 	europe_gdf.plot(ax=ax, edgecolor='black', color='lightgray')
-	woodland_points = transformed_gdf[(transformed_gdf['LC0_Desc'] == 'Woodland') & (transformed_gdf['pH_H2O'] < 6)]
-	woodland_points.plot(ax=ax, marker='o', color='red', markersize=5)
-	ax.set_title('Woodland areas with pH<6 in Europe')
-	ax.set_xlabel('Longitude (°)')
-	ax.set_ylabel('Latitude (°)')
-	plt.savefig('woodland_pH_low.png', bbox_inches='tight')
+	transformed_gdf[(transformed_gdf['LC0_Desc'] == 'Woodland') & (transformed_gdf['pH_CaCl2'] < 6)].plot(ax=ax)
+	ax.set_title('Locations of Woodland with pH<6 on a map')
+	plt.savefig('woodland_low_pH_map.png')
